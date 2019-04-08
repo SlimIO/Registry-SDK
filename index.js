@@ -26,25 +26,41 @@ async function meta() {
  * @returns {Promise} Object of the request with key access_token
  */
 async function login(userName, passWord) {
-    const { data } = await post(`${URL}/login`, {
+    return (await post(`${URL}/login`, {
         body: {
             username: userName,
             password: passWord
         }
-    });
+    })).data;
+}
 
-    return data;
+/**
+ * @async
+ * @function user
+ * @description Authenticate a user and get an AccessToken.
+ * @param {!string} userName User name
+ * @param {!string} passWord User password
+ * @returns {Promise} Object of the request with key access_token
+ */
+async function users(userName, passWord) {
+    return (await post(`${URL}/users`, {
+        body: {
+            username: userName,
+            password: passWord
+        }
+    })).data;
 }
 
 async function test() {
     console.log(red(1), await meta());
     console.log(red(2), await login("nicolas", "NICOLAS"));
+    // console.log(red(3), await users("peter", "parker"));
 }
 
 test();
 
 // user("nicolas", "NICOLAS");
 
-module.exports = { meta, login };
+module.exports = { meta, login, users };
 
 
