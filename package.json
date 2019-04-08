@@ -22,7 +22,8 @@
     },
     "homepage": "https://github.com/SlimIO/Registry-SDK#readme",
     "dependencies": {
-        "httpie": "^1.1.1"
+        "httpie": "^1.1.1",
+        "kleur": "^3.0.3"
     },
     "devDependencies": {
         "@commitlint/cli": "^7.5.2",
