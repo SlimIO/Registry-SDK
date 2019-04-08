@@ -9,7 +9,8 @@ const URL = `http://localhost:${PORT}`;
 /**
  * @async
  * @function meta
- * @description 
+ * @description Return service metadata
+ * @returns {Promise<number>} The data for route ./
  */
 async function meta() {
     try {
@@ -22,5 +23,7 @@ async function meta() {
 }
 
 meta();
+
+module.exports = { meta };
 
 
