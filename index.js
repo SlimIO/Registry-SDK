@@ -19,7 +19,7 @@ async function meta() {
 
 /**
  * @async
- * @function user
+ * @function login
  * @description Authenticate a user and get an AccessToken.
  * @param {!string} userName User name
  * @param {!string} passWord User password
@@ -40,7 +40,7 @@ async function login(userName, passWord) {
  * @description Authenticate a user and get an AccessToken.
  * @param {!string} userName User name
  * @param {!string} passWord User password
- * @returns {Promise} Object of the request with key access_token
+ * @returns {Promise} Object of the request with key userId
  */
 async function users(userName, passWord) {
     return (await post(`${URL}/users`, {
@@ -58,8 +58,6 @@ async function test() {
 }
 
 test();
-
-// user("nicolas", "NICOLAS");
 
 module.exports = { meta, login, users };
 
