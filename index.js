@@ -4,7 +4,7 @@ const { red } = require("kleur");
 
 // Constantes
 const PORT = 1337;
-const URL = `http://localhost:${PORT}`;
+const userURL = new URL(`http://localhost:${PORT}`);
 
 // Globals
 let accessToken = "";
@@ -16,7 +16,7 @@ let accessToken = "";
  * @returns {Promise} Object of the request with uptime key
  */
 async function meta() {
-    return (await get(URL)).data;
+    return (await get(userURL)).data;
 }
 
 /**
@@ -28,7 +28,7 @@ async function meta() {
  * @returns {Promise} Object of the request with access_token key
  */
 async function login(username, password) {
-    const { data } = await post(`${URL}/login`, {
+    const { data } = await post(new URL("/login", userURL), {
         body: { username, password }
     });
     accessToken = data.access_token;
@@ -40,17 +40,16 @@ async function login(username, password) {
  * @async
  * @function users
  * @description Create a new user.
- * @param {!string} userName User name
- * @param {!string} passWord User password
+ * @param {!string} username User name
+ * @param {!string} password User password
  * @returns {Promise} Object of the request with key userId
  */
-async function users(userName, passWord) {
-    return (await post(`${URL}/users`, {
-        body: {
-            username: userName,
-            password: passWord
-        }
-    })).data;
+async function users(username, password) {
+    const { data } = await post(new URL("/users", userURL), {
+        body: { username, password }
+    });
+
+    return data;
 }
 
 /**
@@ -72,7 +71,7 @@ async function publish(addon, token) {
             throw new Error("Acces Token void. Required connexion before");
         }
         console.log(accessToken);
-        const { data } = (await post(`${URL}/addon/publish`), {
+        const { data } = (await post(`${userURL}/addon/publish`), {
             body: infos,
             headers: {
                 Authorization: accessToken
@@ -101,18 +100,18 @@ async function addonPublich(addonName) {
 
 async function test() {
     // console.log(red(1), await meta());
-    console.log(red(2), await login("nicolas", "NICOLAS"));
-    addon({
-        name: "AddonTest2",
-        description: "",
-        version: "1.0.0",
-        git: "http://test.fr"
-    });
-    // console.log(red(3), await users("peter", "parker"));
+    // console.log(red(2), await login("nicolas", "NICOLAS"));
+    // addon({
+    //     name: "AddonTest2",
+    //     description: "",
+    //     version: "1.0.0",
+    //     git: "http://test.fr"
+    // });
+    console.log(red(3), await users("Sophie", "parkerr"));
 }
 
 test();
 
-module.exports = { meta, login, users, addon };
+module.exports = { meta, login, users, publish };
 
 
