@@ -28,6 +28,9 @@ async function meta() {
  * @returns {Promise} Object of the request with access_token key
  */
 async function login(username, password) {
+    if (username === undefined || password === undefined) {
+        console.error(red("This method need two arguments"));
+    }
     const { data } = await post(new URL("/login", userURL), {
         body: { username, password }
     });
@@ -45,6 +48,9 @@ async function login(username, password) {
  * @returns {Promise} Object of the request with key userId
  */
 async function users(username, password) {
+    if (username === undefined || password === undefined) {
+        console.error(red("This method need two arguments"));
+    }
     const { data } = await post(new URL("/users", userURL), {
         body: { username, password }
     });
@@ -67,6 +73,9 @@ async function users(username, password) {
  */
 // eslint-disable-next-line consistent-return
 async function publish(addon, token) {
+    if (addon === undefined || token === undefined) {
+        console.error(red("This method need two arguments"));
+    }
     try {
         const res = await post(new URL("/addon/publish", userURL), {
             body: { name, description, version, git, organisation } = addon,
@@ -89,6 +98,17 @@ async function publish(addon, token) {
  * @returns {Promise<Array<String>>} Addon array
  */
 async function addon() {
+    return (await get(new URL("/addon", userURL))).data;
+}
+
+/**
+ * @async
+ * @function addonName
+ * @param {!string} name Addon name
+ * @description Get a given addon by his name.
+ * @returns {Promise} Object with addon infos
+ */
+async function addonName(name) {
     return (await get(new URL("/addon", userURL))).data;
 }
 
