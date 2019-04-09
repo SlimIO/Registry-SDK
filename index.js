@@ -99,8 +99,8 @@ async function addon() {
  * @returns {Promise} Object with addon infos
  */
 async function addonName(addonName) {
-    if (addonName === undefined) {
-        return console.error(red("This method need one argument, addonName"));
+    if (typeof addonName !== "string") {
+        throw new TypeError("addonName must be a string");
     }
     const { data } = await get(new URL(`/addon/${addonName}`, userURL));
 
