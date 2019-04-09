@@ -29,7 +29,7 @@ async function meta() {
  */
 async function login(username, password) {
     if (username === undefined || password === undefined) {
-        console.error(red("This method need two arguments"));
+        return console.error(red("This method need two arguments, username & password"));
     }
     const { data } = await post(new URL("/login", userURL), {
         body: { username, password }
@@ -49,7 +49,7 @@ async function login(username, password) {
  */
 async function users(username, password) {
     if (username === undefined || password === undefined) {
-        console.error(red("This method need two arguments"));
+        return console.error(red("This method need two arguments, username & password"));
     }
     const { data } = await post(new URL("/users", userURL), {
         body: { username, password }
@@ -62,33 +62,28 @@ async function users(username, password) {
  * @async
  * @function publish
  * @description Create or update an Addon release.
- * @param {!Object} addon Addon infos
- * @param {!string} addon.name Addon name
- * @param {string} addon.description Addon description
- * @param {!string} addon.version Semver
- * @param {!string} addon.git Git url
- * @param {string} addon.organisation Organisaion name
+ * @param {!Object} addonInfos Addon infos
+ * @param {!string} addonInfos.name Addon name
+ * @param {string} addonInfos.description Addon description
+ * @param {!string} addonInfos.version Semver
+ * @param {!string} addonInfos.git Git url
+ * @param {string} addonInfos.organisation Organisaion name
  * @param {!string} token Access token user
  * @returns {Promise} Object with addonId key
  */
 // eslint-disable-next-line consistent-return
-async function publish(addon, token) {
-    if (addon === undefined || token === undefined) {
-        console.error(red("This method need two arguments"));
+async function publish(addonInfos, token) {
+    if (addonInfos === undefined || token === undefined) {
+        return console.error(red("This method need two arguments, addonInfos & token"));
     }
-    try {
-        const res = await post(new URL("/addon/publish", userURL), {
-            body: { name, description, version, git, organisation } = addon,
-            headers: {
-                Authorization: token
-            }
-        });
+    const { data } = await post(new URL("/addon/publish", userURL), {
+        body: { name, description, version, git, organisation } = addonInfos,
+        headers: {
+            Authorization: token
+        }
+    });
 
-        return res.data;
-    }
-    catch (err) {
-        console.error(red("Error :"), err.statusCode, err.message);
-    }
+    return data;
 }
 
 /**
@@ -104,12 +99,17 @@ async function addon() {
 /**
  * @async
  * @function addonName
- * @param {!string} name Addon name
+ * @param {!string} addonName Addon name
  * @description Get a given addon by his name.
  * @returns {Promise} Object with addon infos
  */
-async function addonName(name) {
-    return (await get(new URL("/addon", userURL))).data;
+async function addonName(addonName) {
+    if (addonName === undefined) {
+        return console.error(red("This method need one argument, addonName"));
+    }
+    const { data } = await get(new URL(`/addon/${addonName}`, userURL));
+
+    return data;
 }
 
 async function test() {
@@ -123,7 +123,8 @@ async function test() {
     //     git: "http://test.fr"
     // }, token.access_token));
     // console.log(await users("Sophie", "parkerr"));
-    console.log(await addon());
+    // console.log(await addon());
+    console.log(await addonName("test3"));
 }
 
 test();
