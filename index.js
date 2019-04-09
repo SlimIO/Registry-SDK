@@ -65,53 +65,49 @@ async function users(username, password) {
  * @param {!string} token Access token user
  * @returns {Promise} Object with addonId key
  */
+// eslint-disable-next-line consistent-return
 async function publish(addon, token) {
     try {
-        if (accessToken === "") {
-            throw new Error("Acces Token void. Required connexion before");
-        }
-        console.log(accessToken);
-        const { data } = (await post(`${userURL}/addon/publish`), {
-            body: infos,
+        const res = await post(new URL("/addon/publish", userURL), {
+            body: { name, description, version, git, organisation } = addon,
             headers: {
-                Authorization: accessToken
+                Authorization: token
             }
-        }).data;
+        });
+
+        return res.data;
     }
-    catch (error) {
-        console.log(error.message);
+    catch (err) {
+        console.error(red("Error :"), err.statusCode, err.message);
     }
 }
 
 /**
  * @async
  * @function addon
- * @description Get a given addon by his name (arg !== undefined). OR get all available addons.
- * @param {string} addonName User name
+ * @description Get all available addons.
  * @returns {Promise<Array<String>>} Addon array
  */
-async function addonPublich(addonName) {
-    if (addonName !== undefined) {
-        return;
-    }
-
-    return;
+async function addon() {
+    return (await get(new URL("/addon", userURL))).data;
 }
 
 async function test() {
-    // console.log(red(1), await meta());
-    // console.log(red(2), await login("nicolas", "NICOLAS"));
-    // addon({
-    //     name: "AddonTest2",
+    // console.log(await meta());
+    // console.log(await login("nicolas", "NICOLAS"));
+    // const token = await login("nicolas", "NICOLAS");
+    // console.log(await publish({
+    //     name: "sdfdsfvrdsg",
     //     description: "",
     //     version: "1.0.0",
     //     git: "http://test.fr"
-    // });
-    console.log(red(3), await users("Sophie", "parkerr"));
+    // }, token.access_token));
+    // console.log(await users("Sophie", "parkerr"));
+    console.log(await addon());
 }
 
 test();
 
-module.exports = { meta, login, users, publish };
+module.exports = { meta, login, users, publish, addon };
 
 
