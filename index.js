@@ -1,3 +1,6 @@
+// Require Internal dependencies
+const { typeArg } = require("./src/utils");
+
 // Require Third-party dependencies
 const { get, post, send } = require("httpie");
 
@@ -24,7 +27,7 @@ async function meta() {
  * @returns {Promise} Object of the request with access_token key
  */
 async function login(username, password) {
-    if (typeof username !== "string" || typeof password !== "string") {
+    if (typeArg(username, password)) {
         throw new TypeError("username and password must be strings");
     }
     const { data } = await post(new URL("/login", userURL), {
@@ -43,7 +46,7 @@ async function login(username, password) {
  * @returns {Promise} Object of the request with key userId
  */
 async function users(username, password) {
-    if (typeof username !== "string" || typeof password !== "string") {
+    if (typeArg(username, password)) {
         throw new TypeError("username and password must be strings");
     }
     const { data } = await post(new URL("/users", userURL), {
@@ -68,7 +71,7 @@ async function users(username, password) {
  */
 // eslint-disable-next-line consistent-return
 async function publish(addonInfos, token) {
-    if (!Object.keys(addonInfos).length || typeof token !== "string") {
+    if (!Object.keys(addonInfos).length || typeArg(token)) {
         throw new TypeError("addonInfos mustn't be a empty object, token must be a string");
     }
     const { data } = await post(new URL("/addon/publish", userURL), {
@@ -99,7 +102,7 @@ async function addon() {
  * @returns {Promise} Object with addon infos
  */
 async function addonName(addonName) {
-    if (typeof addonName !== "string") {
+    if (typeArg(addonName)) {
         throw new TypeError("addonName must be a string");
     }
 
@@ -108,33 +111,57 @@ async function addonName(addonName) {
 
 /**
  * @async
- * @function org
+ * @function orga
  * @description Get all organisations
  * @returns {Promise} Object with organisations infos
  */
-async function org() {
+async function orga() {
     return (await get(new URL("/organisation", userURL))).data;
 }
 
 /**
  * @async
- * @function orgName
+ * @function orgaName
  * @description Get an organisation by his name
  * @param {!string} name Organisation name
  * @returns {Promise} Object with organisation infos
  */
-async function orgName(name) {
-    if (typeof name !== "string") {
+async function orgaName(name) {
+    if (typeArg(name)) {
         throw new TypeError("name must be a string");
     }
 
     return (await get(new URL(`/organisation/${name}`, userURL))).data;
 }
 
+/**
+ * @async
+ * @function addUser
+ * @description Add a user to an organisation.
+ * @param {!string} orgaName Organisation name
+ * @param {!string} userName User name
+ * @param {!string} token User token
+ * @returns {Promise} Object with organisation and user infos
+ */
+async function addUser(orgaName, userName, token) {
+    if (typeArg(orgaName, userName, token)) {
+        throw new TypeError("orgaName, userName and token must be strings");
+    }
+
+    const resource = `/organisation/${orgaName}/${userName}`;
+    const { data } = await post(new URL(resource, userURL), {
+        headers: {
+            Authorization: token
+        }
+    });
+
+    return data;
+}
+
 async function test() {
     // console.log(await meta());
-    // console.log(await login("nicolas", "NICOLAS"));
-    // const token = await login("nicolas", "NICOLAS");
+    // console.log(await login("admin", "admin1953"));
+    const token = (await login("admin", "admin1953")).access_token;
     // console.log(await publish({
     //     name: "test7",
     //     description: "",
@@ -144,11 +171,22 @@ async function test() {
     // console.log(await users("Sophie", "parkerr"));
     // console.log(await addon());
     // console.log(await addonName("test3"));
-    console.log(await orgName("SlimIO"));
+    // console.log(await orgaName("SlimIO"));
+    // console.log(await addUser("SlimIO", "sophie", token));
 }
 
 test();
 
-module.exports = { meta, login, users, publish, addon, addonName };
+module.exports = {
+    meta,
+    login,
+    users,
+    publish,
+    addon,
+    addonName,
+    orga,
+    orgaName,
+    addUser
+};
 
 
