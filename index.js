@@ -152,12 +152,6 @@ async function addUser(orgaName, userName, token) {
     return data;
 }
 
-async function test() {
-    console.log(await users("admin3"));
-}
-
-test();
-
 module.exports = {
     meta,
     login,
