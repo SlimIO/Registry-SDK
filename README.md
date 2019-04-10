@@ -8,7 +8,7 @@ Registry-SDK is a set methods to query the Registry API. A account will required
 ## Requirements
 - Node.js v10 or higher
 
-## Getting Starteddrg
+## Getting Started
 
 This package is available in the Node Package Repository and can be easily installed with [npm](https://docs.npmjs.com/getting-started/what-is-npm) or [yarn](https://yarnpkg.com).
 
