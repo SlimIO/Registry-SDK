@@ -3,16 +3,15 @@
  * @function type
  * @description Loop on types of the arguments
  * @param  {...any} args Arguments given at the function
- * @returns {Boolean}
+ * @throws will throw a TypeError if the argument isn't a string
+ * @returns {void}
  */
 function typeArg(...args) {
     for (let idx = 0; idx < args.length; idx++) {
         if (typeof args[idx] !== "string") {
-            return true;
+            throw new TypeError("Arguments must be strings");
         }
     }
-
-    return false;
 }
 
 module.exports = { typeArg };

@@ -27,9 +27,8 @@ async function meta() {
  * @returns {Promise<Object>} Object of the request with access_token key
  */
 async function login(username, password) {
-    if (typeArg(username, password)) {
-        throw new TypeError("username and password must be strings");
-    }
+    typeArg(username, password);
+
     const { data } = await post(new URL("/login", userURL), {
         body: { username, password }
     });
@@ -46,9 +45,8 @@ async function login(username, password) {
  * @returns {Promise<Object>} Object of the request with key userId
  */
 async function users(username, password) {
-    if (typeArg(username, password)) {
-        throw new TypeError("username and password must be strings");
-    }
+    typeArg(username, password);
+
     const { data } = await post(new URL("/users", userURL), {
         body: { username, password }
     });
