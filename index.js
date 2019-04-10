@@ -111,11 +111,14 @@ async function addon() {
 }
 
 /**
+ * @typedef {Object} listAddons
+ */
+/**
  * @async
  * @function addonName
  * @description Get a given addon by his name.
  * @param {!string} addonName Addon name
- * @returns {Promise<Object>} Object with addon infos
+ * @returns {Promise<listAddons>} Object with addon infos
  */
 async function addonName(addonName) {
     argsMustBeString(addonName);
@@ -124,21 +127,28 @@ async function addonName(addonName) {
 }
 
 /**
+ * @typedef {Object} listOrgas
+ * @property {string} name
+ */
+/**
  * @async
  * @function orga
  * @description Get all organisations
- * @returns {Promise<Object>} Object with organisations infos
+ * @returns {Promise<listOrgas>} Object with organisations infos
  */
 async function orga() {
     return (await get(new URL("/organisation", REGISTRY_URL))).data;
 }
 
 /**
+ * @typedef {Object} orgaInfo
+ */
+/**
  * @async
  * @function orgaName
  * @description Get an organisation by his name
  * @param {!string} name Organisation name
- * @returns {Promise<Object>} Object with organisation infos
+ * @returns {Promise<orgaInfo>} Object with organisation infos
  */
 async function orgaName(name) {
     argsMustBeString(name);
@@ -147,13 +157,16 @@ async function orgaName(name) {
 }
 
 /**
+ * @typedef {Object} orgaUserinfos
+ */
+/**
  * @async
  * @function OrgaAddUser
  * @description Add a user to an organisation.
  * @param {!string} orgaName Organisation name
  * @param {!string} userName User name
  * @param {!string} token User token
- * @returns {Promise<Object>} Object with organisation and user infos
+ * @returns {Promise<orgaUserinfos>} Object with organisation and user infos
  */
 async function OrgaAddUser(orgaName, userName, token) {
     argsMustBeString(orgaName, userName, token);
@@ -167,12 +180,6 @@ async function OrgaAddUser(orgaName, userName, token) {
 
     return data;
 }
-
-async function test() {
-    console.log(await login("sophie"));
-}
-
-test();
 
 module.exports = {
     meta,
