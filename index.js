@@ -102,9 +102,8 @@ async function addonName(addonName) {
     if (typeof addonName !== "string") {
         throw new TypeError("addonName must be a string");
     }
-    const { data } = await get(new URL(`/addon/${addonName}`, userURL));
 
-    return data;
+    return (await get(new URL(`/addon/${addonName}`, userURL))).data;
 }
 
 /**
@@ -115,6 +114,21 @@ async function addonName(addonName) {
  */
 async function org() {
     return (await get(new URL("/organisation", userURL))).data;
+}
+
+/**
+ * @async
+ * @function orgName
+ * @description Get an organisation by his name
+ * @param {!string} name Organisation name
+ * @returns {Promise} Object with organisation infos
+ */
+async function orgName(name) {
+    if (typeof name !== "string") {
+        throw new TypeError("name must be a string");
+    }
+
+    return (await get(new URL(`/organisation/${name}`, userURL))).data;
 }
 
 async function test() {
@@ -130,7 +144,7 @@ async function test() {
     // console.log(await users("Sophie", "parkerr"));
     // console.log(await addon());
     // console.log(await addonName("test3"));
-    console.log(await org());
+    console.log(await orgName("SlimIO"));
 }
 
 test();
