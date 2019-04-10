@@ -19,7 +19,21 @@ $ yarn add @slimio/registry-sdk
 ```
 
 ## Usage example
-TBC
+```js
+const { login } = require("@slimio/registry-sdk");
+
+async function myToken() {
+    console.log(await login(yourUserName, yourPassword));
+}
+
+myToken();
+```
+Return an AccessToken which will be required for some methods.
+```js
+{
+    access_token: string;
+}
+```
 
 ## API
 TBC
