@@ -94,8 +94,8 @@ async function addon() {
 /**
  * @async
  * @function addonName
- * @param {!string} addonName Addon name
  * @description Get a given addon by his name.
+ * @param {!string} addonName Addon name
  * @returns {Promise} Object with addon infos
  */
 async function addonName(addonName) {
@@ -107,19 +107,30 @@ async function addonName(addonName) {
     return data;
 }
 
+/**
+ * @async
+ * @function org
+ * @description Get all organisations
+ * @returns {Promise} Object with organisations infos
+ */
+async function org() {
+    return (await get(new URL("/organisation", userURL))).data;
+}
+
 async function test() {
     // console.log(await meta());
     // console.log(await login("nicolas", "NICOLAS"));
-    const token = await login("nicolas", "NICOLAS");
-    console.log(await publish({
-        name: "test7",
-        description: "",
-        version: "1.0.0",
-        git: "http://test.fr"
-    }, token.access_token));
+    // const token = await login("nicolas", "NICOLAS");
+    // console.log(await publish({
+    //     name: "test7",
+    //     description: "",
+    //     version: "1.0.0",
+    //     git: "http://test.fr"
+    // }, token.access_token));
     // console.log(await users("Sophie", "parkerr"));
     // console.log(await addon());
     // console.log(await addonName("test3"));
+    console.log(await org());
 }
 
 test();
