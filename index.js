@@ -1,5 +1,5 @@
 // Require Internal dependencies
-const { typeArg } = require("./src/utils");
+const { checkArg } = require("./src/utils");
 
 // Require Third-party dependencies
 const { get, post } = require("httpie");
@@ -27,7 +27,7 @@ async function meta() {
  * @returns {Promise<Object>} Object of the request with access_token key
  */
 async function login(username, password) {
-    typeArg(username, password);
+    checkArg(username, password);
 
     const { data } = await post(new URL("/login", userURL), {
         body: { username, password }
@@ -45,7 +45,7 @@ async function login(username, password) {
  * @returns {Promise<Object>} Object of the request with key userId
  */
 async function users(username, password) {
-    typeArg(username, password);
+    checkArg(username, password);
 
     const { data } = await post(new URL("/users", userURL), {
         body: { username, password }
@@ -69,9 +69,11 @@ async function users(username, password) {
  */
 // eslint-disable-next-line consistent-return
 async function publish(addonInfos, token) {
-    if (!Object.keys(addonInfos).length || typeArg(token)) {
-        throw new TypeError("addonInfos mustn't be a empty object, token must be a string");
+    if (!Object.keys(addonInfos).length) {
+        throw new TypeError("addonInfos mustn't be a empty object");
     }
+    checkArg(token);
+
     const { data } = await post(new URL("/addon/publish", userURL), {
         body: { name, description, version, git, organisation } = addonInfos,
         headers: {
@@ -100,9 +102,7 @@ async function addon() {
  * @returns {Promise<Object>} Object with addon infos
  */
 async function addonName(addonName) {
-    if (typeArg(addonName)) {
-        throw new TypeError("addonName must be a string");
-    }
+    checkArg(addonName);
 
     return (await get(new URL(`/addon/${addonName}`, userURL))).data;
 }
@@ -125,9 +125,7 @@ async function orga() {
  * @returns {Promise<Object>} Object with organisation infos
  */
 async function orgaName(name) {
-    if (typeArg(name)) {
-        throw new TypeError("name must be a string");
-    }
+    checkArg(name);
 
     return (await get(new URL(`/organisation/${name}`, userURL))).data;
 }
@@ -142,9 +140,7 @@ async function orgaName(name) {
  * @returns {Promise<Object>} Object with organisation and user infos
  */
 async function addUser(orgaName, userName, token) {
-    if (typeArg(orgaName, userName, token)) {
-        throw new TypeError("orgaName, userName and token must be strings");
-    }
+    checkArg(orgaName, userName, token);
 
     const resource = `/organisation/${orgaName}/${userName}`;
     const { data } = await post(new URL(resource, userURL), {
