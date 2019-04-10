@@ -132,14 +132,14 @@ async function orgaName(name) {
 
 /**
  * @async
- * @function addUser
+ * @function OrgaAddUser
  * @description Add a user to an organisation.
  * @param {!string} orgaName Organisation name
  * @param {!string} userName User name
  * @param {!string} token User token
  * @returns {Promise<Object>} Object with organisation and user infos
  */
-async function addUser(orgaName, userName, token) {
+async function OrgaAddUser(orgaName, userName, token) {
     checkArg(orgaName, userName, token);
 
     const resource = `/organisation/${orgaName}/${userName}`;
@@ -161,7 +161,7 @@ module.exports = {
     addonName,
     orga,
     orgaName,
-    addUser
+    OrgaAddUser
 };
 
 
