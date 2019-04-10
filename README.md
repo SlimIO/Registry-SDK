@@ -36,7 +36,45 @@ Return an AccessToken which will be required for some methods.
 ```
 
 ## API
-TBC
+All methods return a promise.
+
+### List methods :
+
+<details><summary>meta()</summary>
+    
+</details>
+
+<details><summary>login()</summary>
+
+</details>
+
+<details><summary>users()</summary>
+
+</details>
+
+<details><summary>publish()</summary>
+
+</details>
+
+<details><summary>addon()</summary>
+
+</details>
+
+<details><summary>addonName()</summary>
+
+</details>
+
+<details><summary>orga()</summary>
+
+</details>
+
+<details><summary>orgaName()</summary>
+
+</details>
+
+<details><summary>orgaAddUser()</summary>
+
+</details>
 
 ## License
 MIT

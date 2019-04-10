@@ -1,17 +1,17 @@
+// Require Third-Party dependencies
+const ow = require("ow");
 
 /**
- * @function type
+ * @function argsMustBeString
  * @description Loop on types of the arguments
- * @param  {...any} args Arguments given at the function
- * @throws will throw a TypeError if the argument isn't a string
+ * @param  {any[]} args Arguments given at the function
+ * @throws {ArgumentError} will throw a TypeError if the argument isn't a string
  * @returns {void}
  */
-function checkArg(...args) {
+function argsMustBeString(...args) {
     for (let idx = 0; idx < args.length; idx++) {
-        if (typeof args[idx] !== "string") {
-            throw new TypeError("Arguments must be a string");
-        }
+        ow(args[idx], ow.string);
     }
 }
 
-module.exports = { checkArg };
+module.exports = { argsMustBeString };

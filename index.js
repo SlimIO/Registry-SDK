@@ -1,35 +1,43 @@
 // Require Internal dependencies
-const { checkArg } = require("./src/utils");
+const { argsMustBeString } = require("./src/utils");
 
 // Require Third-party dependencies
 const { get, post } = require("httpie");
 
 // Constantes
 const PORT = 1337;
-const userURL = new URL(`http://localhost:${PORT}`);
+const REGISTRY_URL = new URL(`http://localhost:${PORT}`);
 
+/**
+ * @typedef {Object} MetaData
+ * @property {number} uptime Service metadata.
+ */
 /**
  * @async
  * @function meta
  * @description Return service metadata
- * @returns {Promise<Object>} Object of the request with uptime key
+ * @returns {MetaData} Object of the request with uptime key
  */
 async function meta() {
-    return (await get(userURL)).data;
+    return (await get(REGISTRY_URL)).data;
 }
 
+/**
+ * @typedef {Object} AccessToken
+ * @property {string} access_token AccessToken which will be required for some endpoints
+ */
 /**
  * @async
  * @function login
  * @description Authenticate a user and get an AccessToken.
  * @param {!string} username User name
  * @param {!string} password User password
- * @returns {Promise<Object>} Object of the request with access_token key
+ * @returns {AccessToken} Object of the request with access_token key
  */
 async function login(username, password) {
-    checkArg(username, password);
+    argsMustBeString(username, password);
 
-    const { data } = await post(new URL("/login", userURL), {
+    const { data } = await post(new URL("/login", REGISTRY_URL), {
         body: { username, password }
     });
 
@@ -45,9 +53,9 @@ async function login(username, password) {
  * @returns {Promise<Object>} Object of the request with key userId
  */
 async function users(username, password) {
-    checkArg(username, password);
+    argsMustBeString(username, password);
 
-    const { data } = await post(new URL("/users", userURL), {
+    const { data } = await post(new URL("/users", REGISTRY_URL), {
         body: { username, password }
     });
 
@@ -72,9 +80,9 @@ async function publish(addonInfos, token) {
     if (!Object.keys(addonInfos).length) {
         throw new TypeError("addonInfos mustn't be a empty object");
     }
-    checkArg(token);
+    argsMustBeString(token);
 
-    const { data } = await post(new URL("/addon/publish", userURL), {
+    const { data } = await post(new URL("/addon/publish", REGISTRY_URL), {
         body: { name, description, version, git, organisation } = addonInfos,
         headers: {
             Authorization: token
@@ -91,7 +99,7 @@ async function publish(addonInfos, token) {
  * @returns {Promise<Array<String>>} Addon array
  */
 async function addon() {
-    return (await get(new URL("/addon", userURL))).data;
+    return (await get(new URL("/addon", REGISTRY_URL))).data;
 }
 
 /**
@@ -102,9 +110,9 @@ async function addon() {
  * @returns {Promise<Object>} Object with addon infos
  */
 async function addonName(addonName) {
-    checkArg(addonName);
+    argsMustBeString(addonName);
 
-    return (await get(new URL(`/addon/${addonName}`, userURL))).data;
+    return (await get(new URL(`/addon/${addonName}`, REGISTRY_URL))).data;
 }
 
 /**
@@ -114,7 +122,7 @@ async function addonName(addonName) {
  * @returns {Promise<Object>} Object with organisations infos
  */
 async function orga() {
-    return (await get(new URL("/organisation", userURL))).data;
+    return (await get(new URL("/organisation", REGISTRY_URL))).data;
 }
 
 /**
@@ -125,9 +133,9 @@ async function orga() {
  * @returns {Promise<Object>} Object with organisation infos
  */
 async function orgaName(name) {
-    checkArg(name);
+    argsMustBeString(name);
 
-    return (await get(new URL(`/organisation/${name}`, userURL))).data;
+    return (await get(new URL(`/organisation/${name}`, REGISTRY_URL))).data;
 }
 
 /**
@@ -140,10 +148,10 @@ async function orgaName(name) {
  * @returns {Promise<Object>} Object with organisation and user infos
  */
 async function OrgaAddUser(orgaName, userName, token) {
-    checkArg(orgaName, userName, token);
+    argsMustBeString(orgaName, userName, token);
 
     const resource = `/organisation/${orgaName}/${userName}`;
-    const { data } = await post(new URL(resource, userURL), {
+    const { data } = await post(new URL(resource, REGISTRY_URL), {
         headers: {
             Authorization: token
         }
@@ -151,6 +159,12 @@ async function OrgaAddUser(orgaName, userName, token) {
 
     return data;
 }
+
+async function test() {
+    console.log(await login("sophie"));
+}
+
+test();
 
 module.exports = {
     meta,
