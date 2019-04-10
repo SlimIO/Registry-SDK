@@ -158,25 +158,6 @@ async function addUser(orgaName, userName, token) {
     return data;
 }
 
-async function test() {
-    // console.log(await meta());
-    // console.log(await login("admin", "admin1953"));
-    const token = (await login("admin", "admin1953")).access_token;
-    // console.log(await publish({
-    //     name: "test7",
-    //     description: "",
-    //     version: "1.0.0",
-    //     git: "http://test.fr"
-    // }, token.access_token));
-    // console.log(await users("Sophie", "parkerr"));
-    // console.log(await addon());
-    // console.log(await addonName("test3"));
-    // console.log(await orgaName("SlimIO"));
-    // console.log(await addUser("SlimIO", "sophie", token));
-}
-
-test();
-
 module.exports = {
     meta,
     login,
