@@ -9,7 +9,8 @@
 function checkArg(...args) {
     for (let idx = 0; idx < args.length; idx++) {
         if (typeof args[idx] !== "string") {
-            throw new TypeError("Arguments must be strings");
+            // const arg = args[idx];
+            throw new TypeError(`Argument n°${idx + 1} must be a string`);
         }
     }
 }
