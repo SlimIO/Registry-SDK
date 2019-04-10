@@ -16,7 +16,7 @@ const REGISTRY_URL = new URL(`http://localhost:${PORT}`);
  * @async
  * @function meta
  * @description Return service metadata
- * @returns {MetaData} Object of the request with uptime key
+ * @returns {Promise<MetaData>} Object of the request with uptime key
  */
 async function meta() {
     return (await get(REGISTRY_URL)).data;
@@ -32,7 +32,7 @@ async function meta() {
  * @description Authenticate a user and get an AccessToken.
  * @param {!string} username User name
  * @param {!string} password User password
- * @returns {AccessToken} Object of the request with access_token key
+ * @returns {Promise<AccessToken>} Object of the request with access_token key
  */
 async function login(username, password) {
     argsMustBeString(username, password);
@@ -45,12 +45,16 @@ async function login(username, password) {
 }
 
 /**
+ * @typedef {Object} userId
+ * @property {number} userId user Id in number
+ */
+/**
  * @async
  * @function users
  * @description Create a new user.
  * @param {!string} username User name
  * @param {!string} password User password
- * @returns {Promise<Object>} Object of the request with key userId
+ * @returns {Promise<userId>} Object of the request with userId key
  */
 async function users(username, password) {
     argsMustBeString(username, password);
@@ -63,17 +67,21 @@ async function users(username, password) {
 }
 
 /**
+ * @typedef {Object} addonId
+ * @property {number} addonId Addon id
+ */
+/**
  * @async
  * @function publish
  * @description Create or update an Addon release.
- * @param {!Object} addonInfos Addon infos
+ * @param {Object<addonInfos>} addonInfos Addon infos
  * @param {!string} addonInfos.name Addon name
  * @param {string} addonInfos.description Addon description
  * @param {!string} addonInfos.version Semver
  * @param {!string} addonInfos.git Git url
  * @param {string} addonInfos.organisation Organisaion name
  * @param {!string} token Access token user
- * @returns {Promise<Object>} Object with addonId key
+ * @returns {Promise<addonId>} Object with addonId key
  */
 // eslint-disable-next-line consistent-return
 async function publish(addonInfos, token) {
