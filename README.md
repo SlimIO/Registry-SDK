@@ -136,7 +136,9 @@ main().catch(console.error);
 Return :
 
 ```js
-
+{
+    addonId: number
+}
 ```
 
 </details>
