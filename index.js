@@ -74,24 +74,24 @@ async function users(username, password) {
  * @async
  * @function publish
  * @description Create or update an Addon release.
- * @param {Object<criteria>} criteria Addon infos
- * @param {!string} criteria.name Addon name
- * @param {string} criteria.description Addon description
- * @param {!string} criteria.version Semver
- * @param {!string} criteria.git Git url
- * @param {string} criteria.organisation Organisaion name
+ * @param {Object<elems>} elems Addon infos
+ * @param {!string} elems.name Addon name
+ * @param {string} elems.description Addon description
+ * @param {!string} elems.version Semver
+ * @param {!string} elems.git Git url
+ * @param {string} elems.organisation Organisaion name
  * @param {!string} token Access token user
  * @returns {Promise<addonId>} Object with addonId key
  */
 // eslint-disable-next-line consistent-return
-async function publish(criteria, token) {
-    if (!Object.keys(criteria).length) {
-        throw new TypeError("criteria mustn't be a empty object");
+async function publish(elems, token) {
+    if (!Object.keys(elems).length) {
+        throw new TypeError("elems mustn't be a empty object");
     }
     argsMustBeString(token);
 
     const { data } = await post(new URL("/addon/publish", REGISTRY_URL), {
-        body: { name, description, version, git, organisation } = criteria,
+        body: { name, description, version, git, organisation } = elems,
         headers: {
             Authorization: token
         }

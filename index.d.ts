@@ -93,7 +93,7 @@ declare namespace RegistrySDK {
     export function users(username: string, password: string): Promise <userId>;
     export function addon(): Promise <addonsArray>;
     export function addonName(name: string): Promise <addonInfos>;
-    export function publish(criteria: { 
+    export function publish(elems: { 
         name: string, 
         description?: string ,
         version: string,
