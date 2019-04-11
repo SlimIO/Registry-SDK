@@ -40,19 +40,23 @@ All methods return a promise.
 
 <br />
 
-Service metadata.
+__*Service metadata.*__
+
+---
 
 Argument | Value | Required? | Notes 
 --- | --- | :---: | --- 
 
-Do this :
+<br />
+
+- Do this :
 ```js
 const { meta } = require("@slimio/registry-sdk");
 
 meta().then(console.log).catch(console.error);
 ```
 
-Return :
+- Return :
 ```js
 {
     uptime: number
@@ -66,14 +70,18 @@ Return :
 
 <br />
 
-Authenticate a user and get an AccessToken.
+__*Authenticate a user and get an AccessToken.*__
+
+---
 
 Argument | Value | Required? | Notes 
 --- | --- | :---: | --- 
 myUsername | String | ✅ | Your name 
 myPassword | String | ✅ | Your password 
 
-Do this :
+<br />
+
+- Do this :
 ```js
 const { login } = require("@slimio/registry-sdk");
 
@@ -82,7 +90,7 @@ login("myUsername", "myPassword")
     .catch(console.error);
 ```
 
-Return :
+- Return :
 ```js
 string;
 ```
@@ -94,14 +102,18 @@ string;
 
 <br />
 
-Create a new user.
+__*Create a new user.*__
+
+---
 
 Argument | Value | Required? | Notes 
 --- | --- | :---: | --- 
 newUsername | String | ✅ | User name 
 newPassword | String | ✅ | User password 
 
-Do this :
+<br />
+
+- Do this :
 ```js
 const { users } = require("@slimio/registry-sdk");
 
@@ -110,7 +122,7 @@ users("newUsername", "newPassword")
     .catch(console.error);
 ```
 
-Return :
+- Return :
 ```js
 {
     userId: number;
@@ -124,7 +136,9 @@ Return :
 
 <br />
 
-Create or update an Addon release. This endpoint require an AccessToken.
+__*Create or update an Addon release. This endpoint require an AccessToken.*__
+
+---
 
 Argument | Value | Required? | Notes 
 --- | --- | :---: | --- 
@@ -133,7 +147,9 @@ myToken | String | ✅ | My token obtained with login()
 
 >⚠️ publish() to need that your main directory must contain package.json and slimio.toml files !
 
-Do this :
+<br />
+
+- Do this :
 ```js
 const { login, publish } = require("@slimio/registry-sdk");
 
@@ -147,7 +163,7 @@ async function main() {
 main().then(console.log).catch(console.error);
 ```
 
-Return :
+- Return :
 ```js
 {
     addonId: number
@@ -161,19 +177,23 @@ Return :
 
 <br />
 
-Get all available addons.
+__*Get all available addons.*__
+
+---
 
 Argument | Value | Required? | Notes 
 --- | --- | :---: | --- 
 
-Do this :
+<br />
+
+- Do this :
 ```js
 const { addon } = require("@slimio/registry-sdk");
 
 addon().then(console.log).catch(console.error);
 ```
 
-Return :
+- Return :
 ```js
 [index: number]: string;
 ```
@@ -193,20 +213,24 @@ Return :
 
 <br />
 
-Get a given addon by his name.
+__*Get a given addon by his name.*__
+
+---
 
 Argument | Value | Required? | Notes 
 --- | --- | :---: | --- 
 name | String | ✅ | Addon name
 
-Do this :
+<br />
+
+- Do this :
 ```js
 const { addonName } = require("@slimio/registry-sdk");
 
 addonName("name").then(console.log).catch(console.error);
 ```
 
-Return :
+- Return :
 ```js
 {
     name: string,
@@ -239,19 +263,23 @@ Return :
 
 <br />
 
-Get all organisations.
+__*Get all organisations.*__
+
+---
 
 Argument | Value | Required? | Notes 
 --- | --- | :---: | --- 
 
-Do this :
+<br />
+
+- Do this :
 ```js
 const { orga } = require("@slimio/registry-sdk");
 
 orga().then(console.log).catch(console.error);
 ```
 
-Return :
+- Return :
 ```js
 {
     [name: string]: {
@@ -270,20 +298,24 @@ Return :
 
 <br />
 
-Get an organisation by his name.
+__*Get an organisation by his name.*__
+
+---
 
 Argument | Value | Required? | Notes 
 --- | --- | :---: | --- 
 name | String | ✅ | Organisation name
 
-Do this :
+<br />
+
+- Do this :
 ```js
 const { orgaName } = require("@slimio/registry-sdk");
 
 orgaName("name").then(console.log).catch(console.error);
 ```
 
-Return :
+- Return :
 ```js
 {
     name: string,
@@ -321,7 +353,9 @@ Return :
 
 <br />
 
-Add a user to an organisation. This endpoint require an AccessToken.
+__*Add a user to an organisation. This endpoint require an AccessToken.*__
+
+---
 
 Argument | Value | Required? | Notes 
 --- | --- | :---: | --- 
@@ -329,7 +363,9 @@ orgaName | String | ✅ | Organisation name
 newUsername | String | ✅ | User name to insert to organisation
 myToken | String | ✅ | My token obtained with login() 
 
-Do this :
+<br />
+
+- Do this :
 ```js
 const { login, orgaAddUser } = require("@slimio/registry-sdk");
 
@@ -342,7 +378,7 @@ async function main() {
 
 main().then(console.log).catch(console.error);
 ```
-Return :
+- Return :
 
 ```js
 {
