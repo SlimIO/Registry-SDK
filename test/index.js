@@ -10,6 +10,6 @@ const { meta, login, users, addon, addonName, publish, orga, orgaAddUser, orgaNa
 
 // main().then(console.log).catch(console.error);
 
-addon().then(console.log);
+orgaName("Organisation").then(console.log);
 
 

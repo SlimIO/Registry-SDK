@@ -40,6 +40,9 @@ All methods return a promise.
 
 Service metadata.
 
+ Argument | Value | Required? | Notes 
+ --- | --- | :---: | --- 
+
 Do this :
 ```js
 const { meta } = require("@slimio/registry-sdk");
@@ -48,7 +51,6 @@ meta().then(console.log).catch(console.error);
 ```
 
 Return :
-
 ```js
 {
     uptime: number
@@ -78,7 +80,6 @@ login("myUsername", "myPassword")
 ```
 
 Return :
-
 ```js
 string;
 ```
@@ -106,7 +107,6 @@ users("newUsername", "newPassword")
 ```
 
 Return :
-
 ```js
 {
     userId: number;
@@ -138,12 +138,9 @@ async function main() {
 }
 
 main().then(console.log).catch(console.error);
-
-
 ```
 
 Return :
-
 ```js
 {
     addonId: number
@@ -156,6 +153,11 @@ Return :
 
 <details><summary>addon()</summary>
 
+Get all available addons.
+
+ Argument | Value | Required? | Notes 
+ --- | --- | :---: | --- 
+
 Do this :
 ```js
 const { addon } = require("@slimio/registry-sdk");
@@ -164,9 +166,16 @@ addon().then(console.log).catch(console.error);
 ```
 
 Return :
-
 ```js
-
+[index: number]: string;
+```
+```js
+// Example :
+[
+    "memory",
+    "socket",
+    "etc."
+]
 ```
 
 </details>
@@ -175,15 +184,43 @@ Return :
 
 <details><summary>addonName()</summary>
 
+Get a given addon by his name.
+
+ Argument | Value | Required? | Notes 
+ --- | --- | :---: | --- 
+ addonName | String | ✅ | Addon name
+
 Do this :
 ```js
+const { addonName } = require("@slimio/registry-sdk");
 
+addonName("addonName").then(console.log).catch(console.error);
 ```
 
 Return :
-
 ```js
-
+{
+    name: string,
+    description: string,
+    git: string,
+    createdAt: Date,
+    updatedAt: Date,
+    author: {
+        username: string,
+        description: string
+    },
+    organisations: {
+        name: string,
+        createdAt: Date,
+        updatedAt: Date
+    },
+    version: [
+        {
+            version: string,
+            createdAt: string
+        }
+    ]
+}
 ```
 
 </details>
@@ -192,15 +229,28 @@ Return :
 
 <details><summary>orga()</summary>
 
+Get all organisations.
+
+ Argument | Value | Required? | Notes 
+ --- | --- | :---: | --- 
+
 Do this :
 ```js
+const { orga } = require("@slimio/registry-sdk");
 
+orga().then(console.log).catch(console.error);
 ```
 
 Return :
-
 ```js
-
+{
+    [name: string]: {
+        description: string,
+        owner: string,
+        users: string[]
+        addons: string[]
+    }
+}
 ```
 
 </details>
@@ -215,7 +265,6 @@ Do this :
 ```
 
 Return :
-
 ```js
 
 ```
@@ -230,7 +279,6 @@ Do this :
 ```js
 
 ```
-
 Return :
 
 ```js
