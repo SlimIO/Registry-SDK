@@ -1,5 +1,6 @@
-const methods = require("../index.js");
+const { meta, login, users, addon, addonName, publish, orga, orgaAddUser, orgaName } = require("../index.js");
 
-methods.users();
+
+publish();
 
 

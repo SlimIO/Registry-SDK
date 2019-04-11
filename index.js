@@ -74,24 +74,24 @@ async function users(username, password) {
  * @async
  * @function publish
  * @description Create or update an Addon release.
- * @param {Object<addonInfos>} addonInfos Addon infos
- * @param {!string} addonInfos.name Addon name
- * @param {string} addonInfos.description Addon description
- * @param {!string} addonInfos.version Semver
- * @param {!string} addonInfos.git Git url
- * @param {string} addonInfos.organisation Organisaion name
+ * @param {Object<criteria>} criteria Addon infos
+ * @param {!string} criteria.name Addon name
+ * @param {string} criteria.description Addon description
+ * @param {!string} criteria.version Semver
+ * @param {!string} criteria.git Git url
+ * @param {string} criteria.organisation Organisaion name
  * @param {!string} token Access token user
  * @returns {Promise<addonId>} Object with addonId key
  */
 // eslint-disable-next-line consistent-return
-async function publish(addonInfos, token) {
-    if (!Object.keys(addonInfos).length) {
-        throw new TypeError("addonInfos mustn't be a empty object");
+async function publish(criteria, token) {
+    if (!Object.keys(criteria).length) {
+        throw new TypeError("criteria mustn't be a empty object");
     }
     argsMustBeString(token);
 
     const { data } = await post(new URL("/addon/publish", REGISTRY_URL), {
-        body: { name, description, version, git, organisation } = addonInfos,
+        body: { name, description, version, git, organisation } = criteria,
         headers: {
             Authorization: token
         }
@@ -111,19 +111,19 @@ async function addon() {
 }
 
 /**
- * @typedef {Object} listAddons
+ * @typedef {Object} addonInfos
  */
 /**
  * @async
  * @function addonName
  * @description Get a given addon by his name.
- * @param {!string} addonName Addon name
- * @returns {Promise<listAddons>} Object with addon infos
+ * @param {!string} name Addon name
+ * @returns {Promise<addonInfos>} Object with addon infos
  */
-async function addonName(addonName) {
-    argsMustBeString(addonName);
+async function addonName(name) {
+    argsMustBeString(name);
 
-    return (await get(new URL(`/addon/${addonName}`, REGISTRY_URL))).data;
+    return (await get(new URL(`/addon/${name}`, REGISTRY_URL))).data;
 }
 
 /**
@@ -141,14 +141,14 @@ async function orga() {
 }
 
 /**
- * @typedef {Object} orgaInfo
+ * @typedef {Object} orgaInfos
  */
 /**
  * @async
  * @function orgaName
  * @description Get an organisation by his name
  * @param {!string} name Organisation name
- * @returns {Promise<orgaInfo>} Object with organisation infos
+ * @returns {Promise<orgaInfos>} Object with organisation infos
  */
 async function orgaName(name) {
     argsMustBeString(name);
@@ -161,17 +161,17 @@ async function orgaName(name) {
  */
 /**
  * @async
- * @function OrgaAddUser
+ * @function orgaAddUser
  * @description Add a user to an organisation.
- * @param {!string} orgaName Organisation name
- * @param {!string} userName User name
+ * @param {!string} organame Organisation name
+ * @param {!string} username User name
  * @param {!string} token User token
  * @returns {Promise<orgaUserinfos>} Object with organisation and user infos
  */
-async function orgaAddUser(orgaName, userName, token) {
-    argsMustBeString(orgaName, userName, token);
+async function orgaAddUser(organame, username, token) {
+    argsMustBeString(organame, username, token);
 
-    const resource = `/organisation/${orgaName}/${userName}`;
+    const resource = `/organisation/${organame}/${username}`;
     const { data } = await post(new URL(resource, REGISTRY_URL), {
         headers: {
             Authorization: token
