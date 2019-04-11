@@ -93,13 +93,7 @@ declare namespace RegistrySDK {
     export function users(username: string, password: string): Promise <userId>;
     export function addon(): Promise <addonsArray>;
     export function addonName(name: string): Promise <addonInfos>;
-    export function publish(elems: { 
-        name: string, 
-        description?: string ,
-        version: string,
-        git: string,
-        organisation?: string
-    }, token: string): Promise <addonId>;
+    export function publish(addonMainDir: string, token: string): Promise <addonId>;
     export function orga(): Promise <listOrgas>
     export function orgaName(name: string): Promise <orgaInfos>
     export function orgaAddUser(organame: string, username: string, token: string): Promise <orgaUserinfos>

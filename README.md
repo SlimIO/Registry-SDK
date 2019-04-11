@@ -26,13 +26,11 @@ async function myToken() {
     console.log(await login(yourUserName, yourPassword));
 }
 
-myToken();
+myToken().catch(console.error);
 ```
 Return an AccessToken which will be required for some methods.
 ```js
-{
-    access_token: string;
-}
+string
 ```
 
 ## API
@@ -48,7 +46,7 @@ Do this :
 ```js
 const { meta } = require("@slimio/registry-sdk");
 
-meta().then(console.log);
+meta().then(console.log).catch(console.error);
 ```
 
 Return :
@@ -71,15 +69,15 @@ Do this :
 ```js
 const { login } = require("@slimio/registry-sdk");
 
-login("yourUsername", "yourPassword").then(console.log);
+login("yourUsername", "yourPassword")
+    .then(console.log)
+    .catch(console.error);
 ```
 
 Return :
 
 ```js
-{
-    access_token: string;
-}
+string
 ```
 
 </details>
@@ -94,7 +92,9 @@ Do this :
 ```js
 const { users } = require("@slimio/registry-sdk");
 
-users("newUsername", "newPassword").then(console.log);
+users("newUsername", "newPassword")
+    .then(console.log)
+    .catch(console.error);
 ```
 
 Return :
@@ -125,10 +125,10 @@ async function main() {
         organisation: "Organisation"
     };
 
-    publish(elems, token.access_token).then(console.log);
+    publish(elems, token.access_token);
 }
 
-main().catch(console.error);
+main().then(console.log).catch(console.error);
 
 
 ```

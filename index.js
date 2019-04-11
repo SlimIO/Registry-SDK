@@ -1,6 +1,11 @@
+// Require Node.js dependencies
+const { readFile, readdir } = require("fs").promises;
+const { normalize, isAbsolute, join } = require("path");
+
 // Require Third-party dependencies
 const { get, post } = require("httpie");
 const ow = require("ow");
+const Manifest = require("@slimio/manifest");
 
 // Constantes
 const PORT = 1337;
@@ -76,18 +81,43 @@ async function users(username, password) {
  * @async
  * @function publish
  * @description Create or update an Addon release.
- * @param {Object<elems>} elems Addon infos
- * @param {!string} elems.name Addon name
- * @param {string} elems.description Addon description
- * @param {!string} elems.version Semver
- * @param {!string} elems.git Git url
- * @param {string} elems.organisation Organisaion name
+ * @param {!string} addonMainDir Main path addon directory
  * @param {!string} token Access token user
  * @returns {Promise<addonId>} Object with addonId key
  */
-// eslint-disable-next-line consistent-return
-async function publish(elems, token) {
+async function publish(addonMainDir, token) {
+    const elems = {};
     // Check if arguments are strings
+    ow(addonMainDir, ow.string);
+    ow(token, ow.string);
+
+    const pathAddon = normalize(addonMainDir);
+    if (!isAbsolute(pathAddon)) {
+        throw new Error("The Addon main directory path is incorect");
+    }
+    // Extract data
+    try {
+        const elemsMainDir = new Set(await readdir(pathAddon));
+        if (!elemsMainDir.has("package.json")) {
+            throw new Error(`Package.json doesn't exist in "${pathAddon}" !`);
+        }
+        if (!elemsMainDir.has("slimio.toml")) {
+            throw new Error(`slimio.toml doesn't exist in "${pathAddon}" !`);
+        }
+
+        const manifest = Manifest.open(join(pathAddon, "slimio.toml"));
+        const readPkg = await readFile(join(pathAddon, "package.json"));
+        const pkgJSON = JSON.parse(readPkg);
+        elems.description = pkgJSON.description;
+        elems.git = pkgJSON.homepage;
+        elems.name = manifest.name;
+        elems.organisation = manifest.organisation || "Organisation";
+        elems.version = manifest.version;
+    }
+    catch (err) {
+        console.error(err);
+    }
+    // Check elems object
     ow(elems, ow.object.exactShape({
         name: ow.string,
         description: ow.optional.string,
@@ -95,8 +125,7 @@ async function publish(elems, token) {
         git: ow.string,
         organisation: ow.optional.string
     }));
-    ow(token, ow.string);
-
+    // Query
     const { data } = await post(new URL("/addon/publish", REGISTRY_URL), {
         body: { name, description, version, git, organisation } = elems,
         headers: {
