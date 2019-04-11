@@ -38,6 +38,8 @@ All methods return a promise.
 
 <details><summary>meta()</summary>
 
+<br />
+
 Service metadata.
 
 Argument | Value | Required? | Notes 
@@ -56,12 +58,13 @@ Return :
     uptime: number
 }
 ```
-
 </details>
 
 <br />
 
 <details><summary>login()</summary>
+
+<br />
 
 Authenticate a user and get an AccessToken.
 
@@ -83,12 +86,13 @@ Return :
 ```js
 string;
 ```
-
 </details>
 
 <br />
 
 <details><summary>users()</summary>
+
+<br />
 
 Create a new user.
 
@@ -112,12 +116,13 @@ Return :
     userId: number;
 }
 ```
-
 </details>
 
 <br />
 
 <details><summary>publish()</summary>
+
+<br />
 
 Create or update an Addon release. This endpoint require an AccessToken.
 
@@ -148,12 +153,13 @@ Return :
     addonId: number
 }
 ```
-
 </details>
 
 <br />
 
 <details><summary>addon()</summary>
+
+<br />
 
 Get all available addons.
 
@@ -179,12 +185,13 @@ Return :
     "etc."
 ]
 ```
-
 </details>
 
 <br />
 
 <details><summary>addonName()</summary>
+
+<br />
 
 Get a given addon by his name.
 
@@ -224,12 +231,13 @@ Return :
     ]
 }
 ```
-
 </details>
 
 <br />
 
 <details><summary>orga()</summary>
+
+<br />
 
 Get all organisations.
 
@@ -254,12 +262,13 @@ Return :
     }
 }
 ```
-
 </details>
 
 <br />
 
 <details><summary>orgaName()</summary>
+
+<br />
 
 Get an organisation by his name.
 
@@ -304,12 +313,13 @@ Return :
     ]
 }
 ```
-
 </details>
 
 <br />
 
 <details><summary>orgaAddUser()</summary>
+
+<br />
 
 Add a user to an organisation. This endpoint require an AccessToken.
 
@@ -327,9 +337,13 @@ main().then(console.log).catch(console.error);
 Return :
 
 ```js
-
+{
+    createdAt: date,
+    updatedAt: date,
+    organisationId: number,
+    userId: number
+}
 ```
-
 </details>
 
 ## License
