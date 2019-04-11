@@ -40,8 +40,8 @@ All methods return a promise.
 
 Service metadata.
 
- Argument | Value | Required? | Notes 
- --- | --- | :---: | --- 
+Argument | Value | Required? | Notes 
+--- | --- | :---: | --- 
 
 Do this :
 ```js
@@ -65,10 +65,10 @@ Return :
 
 Authenticate a user and get an AccessToken.
 
- Argument | Value | Required? | Notes 
- --- | --- | :---: | --- 
- myUsername | String | ✅ | Your name 
- myPassword | String | ✅ | Your password 
+Argument | Value | Required? | Notes 
+--- | --- | :---: | --- 
+myUsername | String | ✅ | Your name 
+myPassword | String | ✅ | Your password 
 
 Do this :
 ```js
@@ -92,10 +92,10 @@ string;
 
 Create a new user.
 
- Argument | Value | Required? | Notes 
- --- | --- | :---: | --- 
- newUsername | String | ✅ | User name 
- newPassword | String | ✅ | User password 
+Argument | Value | Required? | Notes 
+--- | --- | :---: | --- 
+newUsername | String | ✅ | User name 
+newPassword | String | ✅ | User password 
 
 Do this :
 ```js
@@ -119,20 +119,22 @@ Return :
 
 <details><summary>publish()</summary>
 
- Argument | Value | Required? | Notes 
- --- | --- | :---: | --- 
- pathOfAddonMainDir | String | ✅ | path of the addon main directory 
- myToken | String | ✅ | My token obtained with login()
+Create or update an Addon release. This endpoint require an AccessToken.
 
- >⚠️ publish() to need that your main directory must contain package.json and slimio.toml files !
+Argument | Value | Required? | Notes 
+--- | --- | :---: | --- 
+pathOfAddonMainDir | String | ✅ | path of the addon main directory 
+myToken | String | ✅ | My token obtained with login()
+
+>⚠️ publish() to need that your main directory must contain package.json and slimio.toml files !
 
 Do this :
 ```js
 const { login, publish } = require("@slimio/registry-sdk");
 
 async function main() {
-    const token = await login("myUsername", "myPassword");
-    const addonId = await publish("pathOfAddonMainDir", "myToken");
+    const myToken = await login("myUsername", "myPassword");
+    const addonId = await publish("pathOfAddonMainDir", myToken);
 
     return addonId;
 }
@@ -155,8 +157,8 @@ Return :
 
 Get all available addons.
 
- Argument | Value | Required? | Notes 
- --- | --- | :---: | --- 
+Argument | Value | Required? | Notes 
+--- | --- | :---: | --- 
 
 Do this :
 ```js
@@ -186,15 +188,15 @@ Return :
 
 Get a given addon by his name.
 
- Argument | Value | Required? | Notes 
- --- | --- | :---: | --- 
- addonName | String | ✅ | Addon name
+Argument | Value | Required? | Notes 
+--- | --- | :---: | --- 
+name | String | ✅ | Addon name
 
 Do this :
 ```js
 const { addonName } = require("@slimio/registry-sdk");
 
-addonName("addonName").then(console.log).catch(console.error);
+addonName("name").then(console.log).catch(console.error);
 ```
 
 Return :
@@ -231,8 +233,8 @@ Return :
 
 Get all organisations.
 
- Argument | Value | Required? | Notes 
- --- | --- | :---: | --- 
+Argument | Value | Required? | Notes 
+--- | --- | :---: | --- 
 
 Do this :
 ```js
@@ -259,14 +261,48 @@ Return :
 
 <details><summary>orgaName()</summary>
 
+Get an organisation by his name.
+
+Argument | Value | Required? | Notes 
+--- | --- | :---: | --- 
+name | String | ✅ | Organisation name
+
 Do this :
 ```js
+const { orga } = require("@slimio/registry-sdk");
 
+orgaName("name").then(console.log).catch(console.error);
 ```
 
 Return :
 ```js
-
+{
+    name: string,
+    description: string,
+    createdAt: Date,
+    updatedAt: Date,
+    owner: {
+        username: string,
+        createdAt: Date,
+        updatedAt: Date
+    },
+    users: [
+        {
+            username: string,
+            createdAt: Date,
+            updatedAt: Date
+        }
+    ]
+    addons: [
+        {
+            name: string,
+            description: string,
+            git: string,
+            createdAt: Date,
+            updatedAt: Date
+        }
+    ]
+}
 ```
 
 </details>
@@ -275,9 +311,18 @@ Return :
 
 <details><summary>orgaAddUser()</summary>
 
+Add a user to an organisation. This endpoint require an AccessToken.
+
 Do this :
 ```js
+async function main() {
+    const myToken = await login("myUsername", "myPassword");
+    const interfaceRet = await orgaAddUser("orgaName", "newUsername", myToken);
 
+    return interfaceRet;
+}
+
+main().then(console.log).catch(console.error);
 ```
 Return :
 
