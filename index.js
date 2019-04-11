@@ -41,7 +41,7 @@ async function login(username, password) {
         body: { username, password }
     });
 
-    return data;
+    return data.access_token;
 }
 
 /**
