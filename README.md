@@ -323,6 +323,12 @@ Return :
 
 Add a user to an organisation. This endpoint require an AccessToken.
 
+Argument | Value | Required? | Notes 
+--- | --- | :---: | --- 
+orgaName | String | ✅ | Organisation name
+newUsername | String | ✅ | User name to insert to organisation
+myToken | String | ✅ | My token obtained with login() 
+
 Do this :
 ```js
 const { login, orgaAddUser } = require("@slimio/registry-sdk");
