@@ -2,13 +2,12 @@ const { meta, login, users, addon, addonName, publish, orga, orgaAddUser, orgaNa
 
 
 async function main() {
-    const token = await login("yourUsername", "yourPassword");
+    const token = await login("admin", "admin1953");
     const elems = {
-        name: "AddonName",
-        description: "AddonDescription",
-        version: "Semver",
-        git: "GitURL",
-        organisation: "Organisation"
+        name: "AddonName3",
+        description: 12,
+        version: "1.0.0",
+        git: "GitURL"
     };
 
     publish(elems, token.access_token).then(console.log);

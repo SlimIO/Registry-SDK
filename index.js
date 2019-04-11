@@ -1,8 +1,6 @@
-// Require Internal dependencies
-const { argsMustBeString } = require("./src/utils");
-
 // Require Third-party dependencies
 const { get, post } = require("httpie");
+const ow = require("ow");
 
 // Constantes
 const PORT = 1337;
@@ -35,7 +33,9 @@ async function meta() {
  * @returns {Promise<AccessToken>} Object of the request with access_token key
  */
 async function login(username, password) {
-    argsMustBeString(username, password);
+    // Check if arguments are strings
+    ow(username, ow.string);
+    ow(password, ow.string);
 
     const { data } = await post(new URL("/login", REGISTRY_URL), {
         body: { username, password }
@@ -57,7 +57,9 @@ async function login(username, password) {
  * @returns {Promise<userId>} Object of the request with userId key
  */
 async function users(username, password) {
-    argsMustBeString(username, password);
+    // Check if arguments are strings
+    ow(username, ow.string);
+    ow(password, ow.string);
 
     const { data } = await post(new URL("/users", REGISTRY_URL), {
         body: { username, password }
@@ -85,10 +87,15 @@ async function users(username, password) {
  */
 // eslint-disable-next-line consistent-return
 async function publish(elems, token) {
-    if (!Object.keys(elems).length) {
-        throw new TypeError("elems mustn't be a empty object");
-    }
-    argsMustBeString(token);
+    // Check if arguments are strings
+    ow(elems, ow.object.exactShape({
+        name: ow.string,
+        description: ow.optional.string,
+        version: ow.string,
+        git: ow.string,
+        organisation: ow.optional.string
+    }));
+    ow(token, ow.string);
 
     const { data } = await post(new URL("/addon/publish", REGISTRY_URL), {
         body: { name, description, version, git, organisation } = elems,
@@ -121,7 +128,8 @@ async function addon() {
  * @returns {Promise<addonInfos>} Object with addon infos
  */
 async function addonName(name) {
-    argsMustBeString(name);
+    // Check if arguments are strings
+    ow(name, ow.string);
 
     return (await get(new URL(`/addon/${name}`, REGISTRY_URL))).data;
 }
@@ -151,7 +159,8 @@ async function orga() {
  * @returns {Promise<orgaInfos>} Object with organisation infos
  */
 async function orgaName(name) {
-    argsMustBeString(name);
+    // Check if arguments are strings
+    ow(name, ow.string);
 
     return (await get(new URL(`/organisation/${name}`, REGISTRY_URL))).data;
 }
@@ -169,7 +178,10 @@ async function orgaName(name) {
  * @returns {Promise<orgaUserinfos>} Object with organisation and user infos
  */
 async function orgaAddUser(organame, username, token) {
-    argsMustBeString(organame, username, token);
+    // Check if arguments are strings
+    ow(organame, ow.string);
+    ow(username, ow.string);
+    ow(token, ow.string);
 
     const resource = `/organisation/${organame}/${username}`;
     const { data } = await post(new URL(resource, REGISTRY_URL), {
