@@ -124,7 +124,7 @@ Return :
  pathOfAddonMainDir | String | ✅ | path of the addon main directory 
  myToken | String | ✅ | My token obtained with login()
 
- Your main directory to need package.json and slimio.toml files !
+ >⚠️ publish() to need that your main directory must contain package.json and slimio.toml files !
 
 Do this :
 ```js
@@ -158,7 +158,9 @@ Return :
 
 Do this :
 ```js
+const { addon } = require("@slimio/registry-sdk");
 
+addon().then(console.log).catch(console.error);
 ```
 
 Return :
