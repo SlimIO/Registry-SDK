@@ -278,7 +278,7 @@ name | String | ✅ | Organisation name
 
 Do this :
 ```js
-const { orga } = require("@slimio/registry-sdk");
+const { orgaName } = require("@slimio/registry-sdk");
 
 orgaName("name").then(console.log).catch(console.error);
 ```
@@ -325,6 +325,8 @@ Add a user to an organisation. This endpoint require an AccessToken.
 
 Do this :
 ```js
+const { login, orgaAddUser } = require("@slimio/registry-sdk");
+
 async function main() {
     const myToken = await login("myUsername", "myPassword");
     const interfaceRet = await orgaAddUser("orgaName", "newUsername", myToken);
