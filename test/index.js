@@ -3,7 +3,7 @@ const { meta, login, users, addon, addonName, publish, orga, orgaAddUser, orgaNa
 
 async function main() {
     const token = await login("admin1", "admin1953");
-    const addonId = await publish("caca", token);
+    const addonId = await publish("test", token);
 
     return addonId;
 }

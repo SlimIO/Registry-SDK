@@ -20,17 +20,15 @@ $ yarn add @slimio/registry-sdk
 
 ## Usage example
 ```js
-const { login } = require("@slimio/registry-sdk");
+const { meta } = require("@slimio/registry-sdk");
 
-async function myToken() {
-    console.log(await login(yourUserName, yourPassword));
-}
-
-myToken().catch(console.error);
+meta().then(console.log).catch(console.error);
 ```
 Return an AccessToken which will be required for some methods.
 ```js
-string
+{
+    uptime: number
+}
 ```
 
 ## API
@@ -65,11 +63,16 @@ Return :
 
 Authenticate a user and get an AccessToken.
 
+ Argument | Value | Required? | Notes 
+ --- | --- | :---: | --- 
+ myUsername | String | ✅ | Your name 
+ myPassword | String | ✅ | Your password 
+
 Do this :
 ```js
 const { login } = require("@slimio/registry-sdk");
 
-login("yourUsername", "yourPassword")
+login("myUsername", "myPassword")
     .then(console.log)
     .catch(console.error);
 ```
@@ -77,7 +80,7 @@ login("yourUsername", "yourPassword")
 Return :
 
 ```js
-string
+string;
 ```
 
 </details>
@@ -87,6 +90,11 @@ string
 <details><summary>users()</summary>
 
 Create a new user.
+
+ Argument | Value | Required? | Notes 
+ --- | --- | :---: | --- 
+ newUsername | String | ✅ | User name 
+ newPassword | String | ✅ | User password 
 
 Do this :
 ```js
@@ -101,7 +109,7 @@ Return :
 
 ```js
 {
-    userId: 1
+    userId: number;
 }
 ```
 
@@ -111,21 +119,22 @@ Return :
 
 <details><summary>publish()</summary>
 
+ Argument | Value | Required? | Notes 
+ --- | --- | :---: | --- 
+ pathOfAddonMainDir | String | ✅ | path of the addon main directory 
+ myToken | String | ✅ | My token obtained with login()
+
+ Your main directory to need package.json and slimio.toml files !
+
 Do this :
 ```js
 const { login, publish } = require("@slimio/registry-sdk");
 
 async function main() {
-    const token = await login("yourUsername", "yourPassword");
-    const elems = {
-        name: "AddonName",
-        description: "AddonDescription",
-        version: "Semver",
-        git: "GitURL",
-        organisation: "Organisation"
-    };
+    const token = await login("myUsername", "myPassword");
+    const addonId = await publish("pathOfAddonMainDir", "myToken");
 
-    publish(elems, token.access_token);
+    return addonId;
 }
 
 main().then(console.log).catch(console.error);
