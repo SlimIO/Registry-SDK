@@ -28,7 +28,7 @@ login("myUsername", "myPassword")
 ```
 Return an AccessToken which will be required for some methods.
 ```js
-token: string;
+string;
 ```
 
 ## API
