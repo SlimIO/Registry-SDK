@@ -20,15 +20,15 @@ $ yarn add @slimio/registry-sdk
 
 ## Usage example
 ```js
-const { meta } = require("@slimio/registry-sdk");
+const { login } = require("@slimio/registry-sdk");
 
-meta().then(console.log).catch(console.error);
+login("myUsername", "myPassword")
+    .then(console.log)
+    .catch(console.error);
 ```
 Return an AccessToken which will be required for some methods.
 ```js
-{
-    uptime: number
-}
+token: string;
 ```
 
 ## API
