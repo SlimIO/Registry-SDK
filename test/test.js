@@ -1,3 +1,7 @@
+// Require Node.js dependencies
+const { writeFile, unlink } = require("fs").promises;
+const { join } = require("path");
+
 // Require Third-Party dependencies
 const japa = require("japa");
 const is = require("@slimio/is");
@@ -8,6 +12,7 @@ const { meta, login, users, addon, addonName, publish, orga, orgaName, orgaAddUs
 
 // Constantes
 const PRIMITIVES = [{}, 10, true, undefined];
+const PATH = __dirname;
 
 japa("require of index.js should returned the set methods", (assert) => {
     assert.strictEqual(is.plainObject(setOfMethods), true);
@@ -64,7 +69,7 @@ japa("users() should returned an ArgumentError if argument(s) aren't string", as
     }
 });
 
-japa("users() should returned an object with userId key (number)", async(assert) => {
+japa.skip("users() should returned an object with userId key (number)", async(assert) => {
     const nbUserRandom = Math.floor(Math.random() * 10000);
     const retUsers = await users(`admin${nbUserRandom}`, "admin1953");
 
@@ -79,7 +84,7 @@ japa("addon() should returned an array", async(assert) => {
     assert.strictEqual(is.array(retAddon), true);
 });
 
-japa("addonName should returned an ArgumentError if argument(s) isn't string", async(assert) => {
+japa("addonName() should returned an ArgumentError if argument(s) isn't string", async(assert) => {
     assert.plan(4);
 
     for (const prim of PRIMITIVES) {
@@ -92,7 +97,7 @@ japa("addonName should returned an ArgumentError if argument(s) isn't string", a
     }
 });
 
-japa("addonName should returned an object", async(assert) => {
+japa("addonName() should returned an object", async(assert) => {
     const retAddonName = await addonName("memory");
 
     assert.strictEqual(is.plainObject(retAddonName), true);
@@ -106,4 +111,52 @@ japa("addonName should returned an object", async(assert) => {
         "organisation",
         "versions"
     ].sort());
+});
+
+japa("publish() should returned an ArgumentError if argument(s) isn't string", async(assert) => {
+    assert.plan(4);
+
+    for (const prim of PRIMITIVES) {
+        try {
+            await publish(prim);
+        }
+        catch (err) {
+            assert.strictEqual(Reflect.get(err, "name"), "ArgumentError");
+        }
+    }
+});
+
+japa("publish() should returned an Error if first argument isn't path of a directory", async(assert) => {
+    assert.plan(1);
+
+    try {
+        await publish("ZzzzzzBlaaaaa", "myToken");
+    }
+    catch ({ message }) {
+        assert.strictEqual(message, "The Addon main directory path is incorect");
+    }
+});
+
+japa("publish() should returned an Error if package.json doesn't exist", async(assert) => {
+    assert.plan(1);
+
+    try {
+        await publish(PATH, "myToken");
+    }
+    catch ({ message }) {
+        assert.strictEqual(message, `package.json doesn't exist in "${__dirname}" !`);
+    }
+});
+
+japa("publish() should returned an Error if slimio.toml doesn't exist", async(assert) => {
+    assert.plan(1);
+
+    await writeFile(join(__dirname, "package.json"), "");
+    try {
+        await publish(PATH, "myToken");
+    }
+    catch ({ message }) {
+        assert.strictEqual(message, `slimio.toml doesn't exist in "${__dirname}" !`);
+    }
+    unlink(join(PATH, "package.json"));
 });

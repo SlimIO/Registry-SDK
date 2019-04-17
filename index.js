@@ -99,13 +99,13 @@ async function publish(addonMainDir, token) {
     try {
         const elemsMainDir = new Set(await readdir(pathAddon));
         if (!elemsMainDir.has("package.json")) {
-            throw new Error(`Package.json doesn't exist in "${pathAddon}" !`);
+            throw new Error(`package.json doesn't exist in "${pathAddon}" !`);
         }
         if (!elemsMainDir.has("slimio.toml")) {
             throw new Error(`slimio.toml doesn't exist in "${pathAddon}" !`);
         }
 
-        const manifest = Manifest.open(join(pathAddon, "slimio.toml"));
+        const manifest = await Manifest.open(join(pathAddon, "slimio.toml"));
         const readPkg = await readFile(join(pathAddon, "package.json"));
         const pkgJSON = JSON.parse(readPkg);
         elems.description = pkgJSON.description;
@@ -113,27 +113,27 @@ async function publish(addonMainDir, token) {
         elems.name = manifest.name;
         elems.organisation = manifest.organisation || "Organisation";
         elems.version = manifest.version;
+        // Check elems object
+        ow(elems, ow.object.exactShape({
+            name: ow.string,
+            description: ow.optional.string,
+            version: ow.string,
+            git: ow.string,
+            organisation: ow.optional.string
+        }));
+        // Query
+        const { data } = await post(new URL("/addon/publish", REGISTRY_URL), {
+            body: { name, description, version, git, organisation } = elems,
+            headers: {
+                Authorization: token
+            }
+        });
+
+        return data;
     }
     catch (err) {
-        console.error(err);
+        throw err;
     }
-    // Check elems object
-    ow(elems, ow.object.exactShape({
-        name: ow.string,
-        description: ow.optional.string,
-        version: ow.string,
-        git: ow.string,
-        organisation: ow.optional.string
-    }));
-    // Query
-    const { data } = await post(new URL("/addon/publish", REGISTRY_URL), {
-        body: { name, description, version, git, organisation } = elems,
-        headers: {
-            Authorization: token
-        }
-    });
-
-    return data;
 }
 
 /**
