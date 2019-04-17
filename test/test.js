@@ -13,10 +13,11 @@ const { meta, login, users, addon, addonName, publish, orga, orgaName, orgaAddUs
 const PORT = 1337;
 const REGISTRY_URL = new URL(`http://localhost:${PORT}`);
 
-japa("meta() should returned an Object with uptime Key", async(assert) => {
+japa("meta() should returned an Object with uptime Key (number)", async(assert) => {
     const retMeta = await meta();
     assert.strictEqual(is.plainObject(retMeta), true);
     assert.deepEqual(Object.keys(retMeta), ["uptime"]);
+    assert.strictEqual(is.number(retMeta.uptime), true);
 });
 
 japa("login() should returned an ArgumentError if no arguments", async(assert) => {
