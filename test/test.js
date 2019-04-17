@@ -191,13 +191,13 @@ japa.group("Test methods", (group) => {
     });
 
     japa("publish() should returned an object with addonId (number)", async(assert) => {
-        const manifest = await Manifest.open(PATH_TOML);
-        try {
-            
-        }
-        catch (err) {
-            
-        }
+        const newContentToml = CONTENT_TOML.replace("Package", "Addon");
+        await writeFile(PATH_TOML, newContentToml);
+        const token = await login("admin1", "admin1953");
+        const retPublish = await publish(PATH, token);
+        assert.strictEqual(is.plainObject(retPublish), true);
+        assert.deepEqual(Object.keys(retPublish), ["addonId"]);
+        assert.strictEqual(is.number(retPublish.addonId), true);
     });
 });
 
