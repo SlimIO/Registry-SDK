@@ -117,6 +117,15 @@ japa("addonName should returned an ArgumentError if no argument", async(assert) 
     }
 });
 
+japa("addonName should returned an ArgumentError if argument isn't string", async(assert) => {
+    try {
+        await addonName(20);
+    }
+    catch (err) {
+        assert.strictEqual(Reflect.get(err, "name"), "ArgumentError");
+    }
+});
+
 japa("addonName should returned an object", async(assert) => {
     const retAddonName = await addonName("memory");
 
