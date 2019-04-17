@@ -105,6 +105,10 @@ async function publish(addonMainDir, token) {
         }
 
         const manifest = await Manifest.open(join(pathAddon, "slimio.toml"));
+        if (manifest.type !== "Addon") {
+            throw new Error("Your project isn't of addon type");
+        }
+
         const readPkg = await readFile(join(pathAddon, "package.json"));
         const pkgJSON = JSON.parse(readPkg);
         const elems = {
@@ -114,17 +118,9 @@ async function publish(addonMainDir, token) {
             organisation: manifest.organisation || "Organisation",
             version: manifest.version
         };
-        // Check elems object
-        ow(elems, ow.object.exactShape({
-            name: ow.string,
-            description: ow.optional.string,
-            version: ow.string,
-            git: ow.string,
-            organisation: ow.optional.string
-        }));
         // Query
         const { data } = await post(new URL("/addon/publish", REGISTRY_URL), {
-            body: { name, description, version, git, organisation } = elems,
+            body: elems,
             headers: {
                 Authorization: token
             }

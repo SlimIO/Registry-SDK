@@ -5,6 +5,7 @@ const { join } = require("path");
 // Require Third-Party dependencies
 const japa = require("japa");
 const is = require("@slimio/is");
+const Manifest = require("@slimio/manifest");
 
 // Internal dependencies
 const setOfMethods = require("../index");
@@ -151,12 +152,31 @@ japa("publish() should returned an Error if package.json doesn't exist", async(a
 japa("publish() should returned an Error if slimio.toml doesn't exist", async(assert) => {
     assert.plan(1);
 
-    await writeFile(join(__dirname, "package.json"), "");
+    await writeFile(join(PATH, "package.json"), "");
     try {
         await publish(PATH, "myToken");
     }
     catch ({ message }) {
-        assert.strictEqual(message, `slimio.toml doesn't exist in "${__dirname}" !`);
+        assert.strictEqual(message, `slimio.toml doesn't exist in "${PATH}" !`);
     }
-    unlink(join(PATH, "package.json"));
+    await unlink(join(PATH, "package.json"));
+});
+
+japa("publish() should returned an Error if project isn't addon type", async(assert) => {
+    assert.plan(1);
+
+    const tomlText = "name = \"test\"\nversion = \"0.1.0\"\ntype = \"Package\"\ndependencies = { }";
+    await writeFile(join(PATH, "package.json"), "");
+    await writeFile(join(PATH, "slimio.toml"), tomlText);
+
+    const manifest = await Manifest.open(join(PATH, "slimio.toml"));
+    try {
+        await publish(PATH, "myToken");
+    }
+    catch ({ message }) {
+        assert.strictEqual(message, "Your project isn't of addon type");
+    }
+
+    await unlink(join(PATH, "package.json"));
+    await unlink(join(PATH, "slimio.toml"));
 });
