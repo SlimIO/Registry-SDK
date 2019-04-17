@@ -12,6 +12,7 @@ const { meta, login, users, addon, addonName, publish, orga, orgaName, orgaAddUs
 // Constantes
 const PORT = 1337;
 const REGISTRY_URL = new URL(`http://localhost:${PORT}`);
+const PRIMITIVES = [{}, 10, true, undefined];
 
 japa("meta() should returned an Object with uptime Key (number)", async(assert) => {
     const retMeta = await meta();
@@ -21,36 +22,16 @@ japa("meta() should returned an Object with uptime Key (number)", async(assert) 
     assert.strictEqual(is.number(retMeta.uptime), true);
 });
 
-japa("login() should returned an ArgumentError if no arguments", async(assert) => {
-    assert.plan(1);
+japa("login() should returned an ArgumentError if argument(s) aren't string", async(assert) => {
+    assert.plan(4);
 
-    try {
-        await login();
-    }
-    catch (err) {
-        assert.strictEqual(Reflect.get(err, "name"), "ArgumentError");
-    }
-});
-
-japa("login() should returned an ArgumentError if just one arguments", async(assert) => {
-    assert.plan(1);
-
-    try {
-        await login("test");
-    }
-    catch (err) {
-        assert.strictEqual(Reflect.get(err, "name"), "ArgumentError");
-    }
-});
-
-japa("login() should returned an ArgumentError if arguments aren't string", async(assert) => {
-    assert.plan(1);
-
-    try {
-        await login("test", 50);
-    }
-    catch (err) {
-        assert.strictEqual(Reflect.get(err, "name"), "ArgumentError");
+    for (const prim of PRIMITIVES) {
+        try {
+            await login(prim);
+        }
+        catch (err) {
+            assert.strictEqual(Reflect.get(err, "name"), "ArgumentError");
+        }
     }
 });
 
@@ -60,36 +41,16 @@ japa("login() should returned a string", async(assert) => {
     assert.strictEqual(is.string(retLogin), true);
 });
 
-japa("users() should returned an ArgumentError if no arguments", async(assert) => {
-    assert.plan(1);
+japa("users() should returned an ArgumentError if argument(s) aren't string", async(assert) => {
+    assert.plan(4);
 
-    try {
-        await users();
-    }
-    catch (err) {
-        assert.strictEqual(Reflect.get(err, "name"), "ArgumentError");
-    }
-});
-
-japa("users() should returned an ArgumentError if just one arguments", async(assert) => {
-    assert.plan(1);
-
-    try {
-        await users("test");
-    }
-    catch (err) {
-        assert.strictEqual(Reflect.get(err, "name"), "ArgumentError");
-    }
-});
-
-japa("users() should returned an ArgumentError if arguments aren't string", async(assert) => {
-    assert.plan(1);
-
-    try {
-        await users("test", 50);
-    }
-    catch (err) {
-        assert.strictEqual(Reflect.get(err, "name"), "ArgumentError");
+    for (const prim of PRIMITIVES) {
+        try {
+            await users(prim);
+        }
+        catch (err) {
+            assert.strictEqual(Reflect.get(err, "name"), "ArgumentError");
+        }
     }
 });
 
@@ -108,21 +69,16 @@ japa("addon() should returned an array", async(assert) => {
     assert.strictEqual(is.array(retAddon), true);
 });
 
-japa("addonName should returned an ArgumentError if no argument", async(assert) => {
-    try {
-        await addonName();
-    }
-    catch (err) {
-        assert.strictEqual(Reflect.get(err, "name"), "ArgumentError");
-    }
-});
+japa("addonName should returned an ArgumentError if argument(s) isn't string", async(assert) => {
+    assert.plan(4);
 
-japa("addonName should returned an ArgumentError if argument isn't string", async(assert) => {
-    try {
-        await addonName(20);
-    }
-    catch (err) {
-        assert.strictEqual(Reflect.get(err, "name"), "ArgumentError");
+    for (const prim of PRIMITIVES) {
+        try {
+            await addonName(prim);
+        }
+        catch (err) {
+            assert.strictEqual(Reflect.get(err, "name"), "ArgumentError");
+        }
     }
 });
 
