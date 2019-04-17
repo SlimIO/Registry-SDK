@@ -86,7 +86,6 @@ async function users(username, password) {
  * @returns {Promise<addonId>} Object with addonId key
  */
 async function publish(addonMainDir, token) {
-    const elems = {};
     // Check if arguments are strings
     ow(addonMainDir, ow.string);
     ow(token, ow.string);
@@ -108,11 +107,13 @@ async function publish(addonMainDir, token) {
         const manifest = await Manifest.open(join(pathAddon, "slimio.toml"));
         const readPkg = await readFile(join(pathAddon, "package.json"));
         const pkgJSON = JSON.parse(readPkg);
-        elems.description = pkgJSON.description;
-        elems.git = pkgJSON.homepage;
-        elems.name = manifest.name;
-        elems.organisation = manifest.organisation || "Organisation";
-        elems.version = manifest.version;
+        const elems = {
+            description: pkgJSON.description,
+            git: pkgJSON.homepage,
+            name: manifest.name,
+            organisation: manifest.organisation || "Organisation",
+            version: manifest.version
+        };
         // Check elems object
         ow(elems, ow.object.exactShape({
             name: ow.string,
