@@ -55,7 +55,7 @@ japa.group("Test methods", (group) => {
     });
 
     japa("login() should returned an ArgumentError if argument(s) aren't string", async(assert) => {
-        assert.plan(4);
+        assert.plan(PRIMITIVES.length);
 
         for (const prim of PRIMITIVES) {
             try {
@@ -74,7 +74,7 @@ japa.group("Test methods", (group) => {
     });
 
     japa("users() should returned an ArgumentError if argument(s) aren't string", async(assert) => {
-        assert.plan(4);
+        assert.plan(PRIMITIVES.length);
 
         for (const prim of PRIMITIVES) {
             try {
@@ -101,7 +101,7 @@ japa.group("Test methods", (group) => {
     });
 
     japa("addonName() should returned an ArgumentError if argument(s) isn't string", async(assert) => {
-        assert.plan(4);
+        assert.plan(PRIMITIVES.length);
 
         for (const prim of PRIMITIVES) {
             try {
@@ -130,7 +130,7 @@ japa.group("Test methods", (group) => {
     });
 
     japa("publish() should returned an ArgumentError if argument(s) isn't string", async(assert) => {
-        assert.plan(4);
+        assert.plan(PRIMITIVES.length);
 
         for (const prim of PRIMITIVES) {
             try {
@@ -207,6 +207,8 @@ japa.group("Test methods", (group) => {
     });
 
     japa("orgaName() should returned an ArgumentError if argument(s) isn't string", async(assert) => {
+        assert.plan(PRIMITIVES.length);
+
         for (const prim of PRIMITIVES) {
             try {
                 await orgaName(prim);
