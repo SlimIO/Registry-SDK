@@ -22,6 +22,8 @@ japa("meta() should returned an Object with uptime Key (number)", async(assert) 
 });
 
 japa("login() should returned an ArgumentError if no arguments", async(assert) => {
+    assert.plan(1);
+
     try {
         await login();
     }
@@ -31,6 +33,8 @@ japa("login() should returned an ArgumentError if no arguments", async(assert) =
 });
 
 japa("login() should returned an ArgumentError if just one arguments", async(assert) => {
+    assert.plan(1);
+
     try {
         await login("test");
     }
@@ -40,6 +44,8 @@ japa("login() should returned an ArgumentError if just one arguments", async(ass
 });
 
 japa("login() should returned an ArgumentError if arguments aren't string", async(assert) => {
+    assert.plan(1);
+
     try {
         await login("test", 50);
     }
@@ -55,6 +61,8 @@ japa("login() should returned a string", async(assert) => {
 });
 
 japa("users() should returned an ArgumentError if no arguments", async(assert) => {
+    assert.plan(1);
+
     try {
         await users();
     }
@@ -64,6 +72,8 @@ japa("users() should returned an ArgumentError if no arguments", async(assert) =
 });
 
 japa("users() should returned an ArgumentError if just one arguments", async(assert) => {
+    assert.plan(1);
+
     try {
         await users("test");
     }
@@ -73,6 +83,8 @@ japa("users() should returned an ArgumentError if just one arguments", async(ass
 });
 
 japa("users() should returned an ArgumentError if arguments aren't string", async(assert) => {
+    assert.plan(1);
+
     try {
         await users("test", 50);
     }
@@ -96,3 +108,27 @@ japa("addon() should returned an array", async(assert) => {
     assert.strictEqual(is.array(retAddon), true);
 });
 
+japa("addonName should returned an ArgumentError if no argument", async(assert) => {
+    try {
+        await addonName();
+    }
+    catch (err) {
+        assert.strictEqual(Reflect.get(err, "name"), "ArgumentError");
+    }
+});
+
+japa("addonName should returned an object", async(assert) => {
+    const retAddonName = await addonName("memory");
+
+    assert.strictEqual(is.plainObject(retAddonName), true);
+    assert.deepEqual(Object.keys(retAddonName).sort(), [
+        "name",
+        "description",
+        "git",
+        "createdAt",
+        "updatedAt",
+        "author",
+        "organisation",
+        "versions"
+    ].sort());
+});
