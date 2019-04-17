@@ -205,6 +205,31 @@ japa.group("Test methods", (group) => {
         assert.strictEqual(is.plainObject(retOrga), true);
         assert.strictEqual(Object.keys(retOrga).every((key) => typeof String), true);
     });
+
+    japa("orgaName() should returned an ArgumentError if argument(s) isn't string", async(assert) => {
+        for (const prim of PRIMITIVES) {
+            try {
+                await orgaName(prim);
+            }
+            catch (err) {
+                assert.strictEqual(Reflect.get(err, "name"), "ArgumentError");
+            }
+        }
+    });
+
+    japa("orgaName() should returned an object", async(assert) => {
+        const retOrgaName = await orgaName("Organisation");
+        assert.strictEqual(is.plainObject(retOrgaName), true);
+        assert.deepEqual(Object.keys(retOrgaName).sort(), [
+            "name",
+            "description",
+            "createdAt",
+            "updatedAt",
+            "owner",
+            "users",
+            "addons"
+        ].sort());
+    });
 });
 
 
