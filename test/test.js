@@ -1,18 +1,28 @@
-// Require Node.js dependencies
-const assert = require("assert");
-
 // Require Third-Party dependencies
-const { get, post } = require("httpie");
 const japa = require("japa");
 const is = require("@slimio/is");
 
 // Internal dependencies
-const { meta, login, users, addon, addonName, publish, orga, orgaName, orgaAddUser } = require("../index");
+const setOfMethods = require("../index");
+const { meta, login, users, addon, addonName, publish, orga, orgaName, orgaAddUser } = setOfMethods;
 
 // Constantes
-const PORT = 1337;
-const REGISTRY_URL = new URL(`http://localhost:${PORT}`);
 const PRIMITIVES = [{}, 10, true, undefined];
+
+japa("require of index.js should returned the set methods", (assert) => {
+    assert.strictEqual(is.plainObject(setOfMethods), true);
+    assert.deepEqual(Object.keys(setOfMethods).sort(), [
+        "meta",
+        "login",
+        "users",
+        "addon",
+        "addonName",
+        "publish",
+        "orga",
+        "orgaName",
+        "orgaAddUser"
+    ].sort());
+});
 
 japa("meta() should returned an Object with uptime Key (number)", async(assert) => {
     const retMeta = await meta();
