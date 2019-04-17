@@ -12,8 +12,9 @@ const setOfMethods = require("../index");
 const { meta, login, users, addon, addonName, publish, orga, orgaName, orgaAddUser } = setOfMethods;
 
 // Constantes
+const NB_RANDOM = Math.floor(Math.random() * 10000);
 const CONTENT_PKG = "{\"description\": \"There is a description here\", \"homepage\": \"There is an url here\"}";
-const CONTENT_TOML = "name = \"test\"\nversion = \"0.1.0\"\ntype = \"Package\"\ndependencies = { }";
+const CONTENT_TOML = `name = "test${NB_RANDOM}"\nversion = "0.1.0"\ntype = "Package"\ndependencies = { }`;
 const PRIMITIVES = [{}, 10, true, undefined];
 const PATH = __dirname;
 const PATH_PKG = join(PATH, "package.json");
@@ -86,8 +87,7 @@ japa.group("Test methods", (group) => {
     });
 
     japa.skip("users() should returned an object with userId key (number)", async(assert) => {
-        const nbUserRandom = Math.floor(Math.random() * 10000);
-        const retUsers = await users(`admin${nbUserRandom}`, "admin1953");
+        const retUsers = await users(`admin${NB_RANDOM}`, "admin1953");
 
         assert.strictEqual(is.plainObject(retUsers), true);
         assert.deepEqual(Object.keys(retUsers), ["userId"]);
@@ -198,6 +198,12 @@ japa.group("Test methods", (group) => {
         assert.strictEqual(is.plainObject(retPublish), true);
         assert.deepEqual(Object.keys(retPublish), ["addonId"]);
         assert.strictEqual(is.number(retPublish.addonId), true);
+    });
+
+    japa("orga() should returned an object", async(assert) => {
+        const retOrga = await orga();
+        assert.strictEqual(is.plainObject(retOrga), true);
+        assert.strictEqual(Object.keys(retOrga).every((key) => typeof String), true);
     });
 });
 
