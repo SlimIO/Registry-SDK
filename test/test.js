@@ -279,6 +279,19 @@ japa.group("Test methods", (group) => {
         }
         index++;
     }).retry(2);
+
+    japa("orgaAddUser() should returned an object", async(assert) => {
+        await users("Kirikou", "EstPetit");
+        const token = await login("admin1", "admin1953");
+        const retOrgaAddUser = await orgaAddUser("Organisation", "Kirikou", token);
+        assert.strictEqual(is.plainObject(retOrgaAddUser), true);
+        assert.deepEqual(Object.keys(retOrgaAddUser).sort(), [
+            "createdAt",
+            "updatedAt",
+            "organisationId",
+            "userId"
+        ].sort());
+    });
 });
 
 
