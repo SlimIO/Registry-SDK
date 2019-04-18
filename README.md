@@ -370,6 +370,9 @@ myToken | String | ✅ | My token obtained with login()
 const { login, orgaAddUser } = require("@slimio/registry-sdk");
 
 async function main() {
+    // If the user to add desn't exist in the database, create this.
+    await users("newUsername", "newPassword");
+
     const myToken = await login("myUsername", "myPassword");
     const interfaceRet = await orgaAddUser("orgaName", "newUsername", myToken);
 
