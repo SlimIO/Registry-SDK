@@ -14,13 +14,9 @@ const { meta, login, users, addon, addonName, publish, orga, orgaName, orgaAddUs
 const NB_RANDOM = Math.floor(Math.random() * 10000);
 const CONTENT_PKG = "{\"description\": \"There is a description here\", \"homepage\": \"There is an url here\"}";
 const CONTENT_TOML = `name = "test${NB_RANDOM}"\nversion = "0.1.0"\ntype = "Package"\ndependencies = { }`;
-const PRIMITIVES = [{}, 10, true, undefined];
 const PATH = __dirname;
 const PATH_PKG = join(PATH, "package.json");
 const PATH_TOML = join(PATH, "slimio.toml");
-
-// Globals
-let index = 0;
 
 japa.group("Test methods", (group) => {
     group.before(async() => {
@@ -31,10 +27,6 @@ japa.group("Test methods", (group) => {
     group.after(async() => {
         await unlink(PATH_PKG);
         await unlink(PATH_TOML);
-    });
-
-    group.beforeEach(() => {
-        index = 0;
     });
 
     japa("require of index.js should returned the set methods", (assert) => {
@@ -60,24 +52,27 @@ japa.group("Test methods", (group) => {
         assert.strictEqual(is.number(retMeta.uptime), true, "'uptime' key's value must be a number");
     });
 
-    japa("login() should returned an ArgumentError if arguments aren't strings", async(assert) => {
-        assert.plan(PRIMITIVES.length);
+    japa("login() should returned an ArgumentError if first argument isn't string", async(assert) => {
+        assert.plan(1);
 
-        for (const prim of PRIMITIVES) {
-            try {
-                if (index === 0) {
-                    await login(prim);
-                }
-                else {
-                    await login("admin1", prim);
-                }
-            }
-            catch (err) {
-                assert.strictEqual(Reflect.get(err, "name"), "ArgumentError", "Argument must be a string");
-            }
+        try {
+            await login(1234);
         }
-        index++;
-    }).retry(1);
+        catch (err) {
+            assert.strictEqual(Reflect.get(err, "name"), "ArgumentError", "Argument must be a string");
+        }
+    });
+
+    japa("login() should returned an ArgumentError if second argument isn't string", async(assert) => {
+        assert.plan(1);
+
+        try {
+            await login("admin1", 1234);
+        }
+        catch (err) {
+            assert.strictEqual(Reflect.get(err, "name"), "ArgumentError", "Argument must be a string");
+        }
+    });
 
     japa("login() should returned a string", async(assert) => {
         const retLogin = await login("admin1", "admin1953");
@@ -85,26 +80,29 @@ japa.group("Test methods", (group) => {
         assert.strictEqual(is.string(retLogin), true, "Returned data must be a string");
     });
 
-    japa("users() should returned an ArgumentError if arguments aren't strings", async(assert) => {
-        assert.plan(PRIMITIVES.length);
+    japa("users() should returned an ArgumentError if first argument isn't string", async(assert) => {
+        assert.plan(1);
 
-        for (const prim of PRIMITIVES) {
-            try {
-                if (index === 0) {
-                    await users(prim);
-                }
-                else {
-                    await users("admin1", prim);
-                }
-            }
-            catch (err) {
-                assert.strictEqual(Reflect.get(err, "name"), "ArgumentError", "Argument must be a string");
-            }
+        try {
+            await users(true);
         }
-        index++;
-    }).retry(1);
+        catch (err) {
+            assert.strictEqual(Reflect.get(err, "name"), "ArgumentError", "Argument must be a string");
+        }
+    });
 
-    japa.skip("users() should returned an object with userId key (number)", async(assert) => {
+    japa("users() should returned an ArgumentError if second argument isn't string", async(assert) => {
+        assert.plan(1);
+
+        try {
+            await users("adminTest", 1234);
+        }
+        catch (err) {
+            assert.strictEqual(Reflect.get(err, "name"), "ArgumentError", "Argument must be a string");
+        }
+    });
+
+    japa("users() should returned an object with userId key (number)", async(assert) => {
         const retUsers = await users(`admin${NB_RANDOM}`, "admin1953");
 
         assert.strictEqual(is.plainObject(retUsers), true, "Returned data must be a plain object");
@@ -119,15 +117,13 @@ japa.group("Test methods", (group) => {
     });
 
     japa("addonName() should returned an ArgumentError if argument isn't a string", async(assert) => {
-        assert.plan(PRIMITIVES.length);
+        assert.plan(1);
 
-        for (const prim of PRIMITIVES) {
-            try {
-                await addonName(prim);
-            }
-            catch (err) {
-                assert.strictEqual(Reflect.get(err, "name"), "ArgumentError", "Argument must be a string");
-            }
+        try {
+            await addonName(1234);
+        }
+        catch (err) {
+            assert.strictEqual(Reflect.get(err, "name"), "ArgumentError", "Argument must be a string");
         }
     });
 
@@ -147,24 +143,27 @@ japa.group("Test methods", (group) => {
         ].sort(), "Returned object must contain all keys");
     });
 
-    japa("publish() should returned an ArgumentError if arguments aren't strings", async(assert) => {
-        assert.plan(PRIMITIVES.length);
+    japa("publish() should returned an ArgumentError if first argument isn't string", async(assert) => {
+        assert.plan(1);
 
-        for (const prim of PRIMITIVES) {
-            try {
-                if (index === 0) {
-                    await publish(prim);
-                }
-                else {
-                    await publish(PATH, prim);
-                }
-            }
-            catch (err) {
-                assert.strictEqual(Reflect.get(err, "name"), "ArgumentError", "Argument must be a string");
-            }
+        try {
+            await publish(1234);
         }
-        index++;
-    }).retry(1);
+        catch (err) {
+            assert.strictEqual(Reflect.get(err, "name"), "ArgumentError", "Argument must be a string");
+        }
+    });
+
+    japa("publish() should returned an ArgumentError if second argument isn't string", async(assert) => {
+        assert.plan(1);
+
+        try {
+            await publish(PATH, 1234);
+        }
+        catch (err) {
+            assert.strictEqual(Reflect.get(err, "name"), "ArgumentError", "Argument must be a string");
+        }
+    });
 
     japa("publish() should returned an Error if first argument isn't path of a directory", async(assert) => {
         assert.plan(1);
@@ -214,7 +213,7 @@ japa.group("Test methods", (group) => {
         }
     });
 
-    japa.skip("publish() should returned an object with addonId (number)", async(assert) => {
+    japa("publish() should returned an object with addonId (number)", async(assert) => {
         const newContentToml = CONTENT_TOML.replace("Package", "Addon");
         await writeFile(PATH_TOML, newContentToml);
         const token = await login("admin1", "admin1953");
@@ -231,15 +230,13 @@ japa.group("Test methods", (group) => {
     });
 
     japa("orgaName() should returned an ArgumentError if argument isn't a string", async(assert) => {
-        assert.plan(PRIMITIVES.length);
+        assert.plan(1);
 
-        for (const prim of PRIMITIVES) {
-            try {
-                await orgaName(prim);
-            }
-            catch (err) {
-                assert.strictEqual(Reflect.get(err, "name"), "ArgumentError", "Argument must be a string");
-            }
+        try {
+            await orgaName(1234);
+        }
+        catch (err) {
+            assert.strictEqual(Reflect.get(err, "name"), "ArgumentError", "Argument must be a string");
         }
     });
 
@@ -257,32 +254,43 @@ japa.group("Test methods", (group) => {
         ].sort(), "Returned object must contain all keys");
     });
 
-    japa("orgaAddUser() should returned an ArgumentError if arguments aren't strings", async(assert) => {
-        assert.plan(PRIMITIVES.length);
+    japa("orgaAddUser() should returned an ArgumentError if first argument isn't string", async(assert) => {
+        assert.plan(1);
 
-        for (const prim of PRIMITIVES) {
-            try {
-                if (index === 0) {
-                    await orgaAddUser(prim);
-                }
-                if (index === 1) {
-                    await orgaAddUser("SlimIO", prim);
-                }
-                else {
-                    await orgaAddUser("SlimIO", "NewUser", prim);
-                }
-            }
-            catch (err) {
-                assert.strictEqual(Reflect.get(err, "name"), "ArgumentError", "Argument must be a string");
-            }
+        try {
+            await orgaAddUser(true);
         }
-        index++;
-    }).retry(2);
+        catch (err) {
+            assert.strictEqual(Reflect.get(err, "name"), "ArgumentError", "Argument must be a string");
+        }
+    });
 
-    japa.skip("orgaAddUser() should returned an object", async(assert) => {
-        await users("Kirikou", "EstPetit");
+    japa("orgaAddUser() should returned an ArgumentError if second argument isn't string", async(assert) => {
+        assert.plan(1);
+
+        try {
+            await orgaAddUser("Organisation", 1234);
+        }
+        catch (err) {
+            assert.strictEqual(Reflect.get(err, "name"), "ArgumentError", "Argument must be a string");
+        }
+    });
+
+    japa("orgaAddUser() should returned an ArgumentError if third argument isn't string", async(assert) => {
+        assert.plan(1);
+
+        try {
+            await orgaAddUser("Organisation", "Kirikou", 1234);
+        }
+        catch (err) {
+            assert.strictEqual(Reflect.get(err, "name"), "ArgumentError", "Argument must be a string");
+        }
+    });
+
+    japa("orgaAddUser() should returned an object", async(assert) => {
+        await users(`Kirikou${NB_RANDOM}`, "EstPetit");
         const token = await login("admin1", "admin1953");
-        const retOrgaAddUser = await orgaAddUser("Organisation", "Kirikou", token);
+        const retOrgaAddUser = await orgaAddUser("Organisation", `Kirikou${NB_RANDOM}`, token);
         assert.strictEqual(is.plainObject(retOrgaAddUser), true, "Returned data must be a plain object");
         assert.deepEqual(Object.keys(retOrgaAddUser).sort(), [
             "createdAt",
