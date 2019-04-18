@@ -11,7 +11,7 @@ const Manifest = require("@slimio/manifest");
 const setOfMethods = require("../index");
 const { meta, login, users, addon, addonName, publish, orga, orgaName, orgaAddUser } = setOfMethods;
 
-// Constantes
+// Constants
 const NB_RANDOM = Math.floor(Math.random() * 10000);
 const CONTENT_PKG = "{\"description\": \"There is a description here\", \"homepage\": \"There is an url here\"}";
 const CONTENT_TOML = `name = "test${NB_RANDOM}"\nversion = "0.1.0"\ntype = "Package"\ndependencies = { }`;
@@ -19,6 +19,9 @@ const PRIMITIVES = [{}, 10, true, undefined];
 const PATH = __dirname;
 const PATH_PKG = join(PATH, "package.json");
 const PATH_TOML = join(PATH, "slimio.toml");
+
+// Globals
+let index = 0;
 
 japa.group("Test methods", (group) => {
     group.before(async() => {
@@ -29,6 +32,10 @@ japa.group("Test methods", (group) => {
     group.after(async() => {
         await unlink(PATH_PKG);
         await unlink(PATH_TOML);
+    });
+
+    group.beforeEach(() => {
+        index = 0;
     });
 
     japa("require of index.js should returned the set methods", (assert) => {
@@ -54,18 +61,24 @@ japa.group("Test methods", (group) => {
         assert.strictEqual(is.number(retMeta.uptime), true);
     });
 
-    japa("login() should returned an ArgumentError if argument(s) aren't string", async(assert) => {
+    japa("login() should returned an ArgumentError if arguments aren't strings", async(assert) => {
         assert.plan(PRIMITIVES.length);
 
         for (const prim of PRIMITIVES) {
             try {
-                await login(prim);
+                if (index === 0) {
+                    await login(prim);
+                }
+                else {
+                    await login("admin1", prim);
+                }
             }
             catch (err) {
                 assert.strictEqual(Reflect.get(err, "name"), "ArgumentError");
             }
         }
-    });
+        index++;
+    }).retry(1);
 
     japa("login() should returned a string", async(assert) => {
         const retLogin = await login("admin1", "admin1953");
@@ -73,18 +86,24 @@ japa.group("Test methods", (group) => {
         assert.strictEqual(is.string(retLogin), true);
     });
 
-    japa("users() should returned an ArgumentError if argument(s) aren't string", async(assert) => {
+    japa("users() should returned an ArgumentError if arguments aren't strings", async(assert) => {
         assert.plan(PRIMITIVES.length);
 
         for (const prim of PRIMITIVES) {
             try {
-                await users(prim);
+                if (index === 0) {
+                    await users(prim);
+                }
+                else {
+                    await users("admin1", prim);
+                }
             }
             catch (err) {
                 assert.strictEqual(Reflect.get(err, "name"), "ArgumentError");
             }
         }
-    });
+        index++;
+    }).retry(1);
 
     japa.skip("users() should returned an object with userId key (number)", async(assert) => {
         const retUsers = await users(`admin${NB_RANDOM}`, "admin1953");
@@ -100,7 +119,7 @@ japa.group("Test methods", (group) => {
         assert.strictEqual(is.array(retAddon), true);
     });
 
-    japa("addonName() should returned an ArgumentError if argument(s) isn't string", async(assert) => {
+    japa("addonName() should returned an ArgumentError if argument isn't a string", async(assert) => {
         assert.plan(PRIMITIVES.length);
 
         for (const prim of PRIMITIVES) {
@@ -129,18 +148,24 @@ japa.group("Test methods", (group) => {
         ].sort());
     });
 
-    japa("publish() should returned an ArgumentError if argument(s) isn't string", async(assert) => {
+    japa("publish() should returned an ArgumentError if arguments aren't strings", async(assert) => {
         assert.plan(PRIMITIVES.length);
 
         for (const prim of PRIMITIVES) {
             try {
-                await publish(prim);
+                if (index === 0) {
+                    await publish(prim);
+                }
+                else {
+                    await publish(PATH, prim);
+                }
             }
             catch (err) {
                 assert.strictEqual(Reflect.get(err, "name"), "ArgumentError");
             }
         }
-    });
+        index++;
+    }).retry(1);
 
     japa("publish() should returned an Error if first argument isn't path of a directory", async(assert) => {
         assert.plan(1);
@@ -190,7 +215,7 @@ japa.group("Test methods", (group) => {
         }
     });
 
-    japa("publish() should returned an object with addonId (number)", async(assert) => {
+    japa.skip("publish() should returned an object with addonId (number)", async(assert) => {
         const newContentToml = CONTENT_TOML.replace("Package", "Addon");
         await writeFile(PATH_TOML, newContentToml);
         const token = await login("admin1", "admin1953");
@@ -206,7 +231,7 @@ japa.group("Test methods", (group) => {
         assert.strictEqual(Object.keys(retOrga).every((key) => typeof String), true);
     });
 
-    japa("orgaName() should returned an ArgumentError if argument(s) isn't string", async(assert) => {
+    japa("orgaName() should returned an ArgumentError if argument isn't a string", async(assert) => {
         assert.plan(PRIMITIVES.length);
 
         for (const prim of PRIMITIVES) {
@@ -232,6 +257,28 @@ japa.group("Test methods", (group) => {
             "addons"
         ].sort());
     });
+
+    japa("orgaAddUser() should returned an ArgumentError if arguments aren't strings", async(assert) => {
+        assert.plan(PRIMITIVES.length);
+
+        for (const prim of PRIMITIVES) {
+            try {
+                if (index === 0) {
+                    await orgaAddUser(prim);
+                }
+                if (index === 1) {
+                    await orgaAddUser("SlimIO", prim);
+                }
+                else {
+                    await orgaAddUser("SlimIO", "NewUser", prim);
+                }
+            }
+            catch (err) {
+                assert.strictEqual(Reflect.get(err, "name"), "ArgumentError");
+            }
+        }
+        index++;
+    }).retry(2);
 });
 
 
