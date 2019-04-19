@@ -22,66 +22,39 @@ $ yarn add @slimio/registry-sdk
 ```js
 const { login } = require("@slimio/registry-sdk");
 
-login("myUsername", "myPassword")
-    .then(console.log)
-    .catch(console.error);
-```
-Return an AccessToken which will be required for some methods.
-```js
-string;
+const token = login("myUsername", "myPassword");
+
+// Return an Acces Token
+console.log(token);
 ```
 
 ## API
-All methods return a promise.
+This section describe how works the methods of Registry-SDK. For a complete definition, take a look at `index.d.ts` !  
+For more information on methods's return, see the documentation of the [Registry](https://github.com/SlimIO/Registry).
 
-### List methods :
 
-<details><summary>meta()</summary>
-
-<br />
-
-__*Service metadata.*__
-
----
-
-Argument | Value | Required? | Notes 
---- | --- | :---: | --- 
+<details><summary>meta(): Promise < MetaData ></summary>
 
 <br />
 
-- Do this :
+Return service metadata.
+
 ```js
 const { meta } = require("@slimio/registry-sdk");
 
-meta().then(console.log).catch(console.error);
-```
+const { uptime } = await meta();
 
-- Return :
-```js
-{
-    uptime: number
-}
+// Return a number
+console.log(uptime);
 ```
 </details>
 
-<br />
-
-<details><summary>login()</summary>
+<details><summary>login(username: string, password: string): Promise < AccessToken ></summary>
 
 <br />
 
-__*Authenticate a user and get an AccessToken.*__
+Authenticate a user and get an AccessToken.
 
----
-
-Argument | Value | Required? | Notes 
---- | --- | :---: | --- 
-myUsername | String | ✅ | Your name 
-myPassword | String | ✅ | Your password 
-
-<br />
-
-- Do this :
 ```js
 const { login } = require("@slimio/registry-sdk");
 
@@ -96,24 +69,12 @@ string;
 ```
 </details>
 
-<br />
-
-<details><summary>users()</summary>
+<details><summary>users(username: string, password: string): Promise < userId ></summary>
 
 <br />
 
-__*Create a new user.*__
+Create a new user.
 
----
-
-Argument | Value | Required? | Notes 
---- | --- | :---: | --- 
-newUsername | String | ✅ | User name 
-newPassword | String | ✅ | User password 
-
-<br />
-
-- Do this :
 ```js
 const { users } = require("@slimio/registry-sdk");
 
@@ -130,26 +91,14 @@ users("newUsername", "newPassword")
 ```
 </details>
 
-<br />
-
-<details><summary>publish()</summary>
+<details><summary>publish(addonMainDir: string, token: string): Promise < addonId ></summary>
 
 <br />
 
-__*Create or update an Addon release. This endpoint require an AccessToken.*__
-
----
-
-Argument | Value | Required? | Notes 
---- | --- | :---: | --- 
-pathOfAddonMainDir | String | ✅ | path of the addon main directory 
-myToken | String | ✅ | My token obtained with login()
+Create or update an Addon release. This endpoint require an AccessToken.
 
 >⚠️ publish() to need that your main directory must contain package.json and slimio.toml files !
 
-<br />
-
-- Do this :
 ```js
 const { login, publish } = require("@slimio/registry-sdk");
 
@@ -171,22 +120,12 @@ main().then(console.log).catch(console.error);
 ```
 </details>
 
-<br />
-
-<details><summary>addon()</summary>
+<details><summary>addon(): Promise < addonsArray ></summary>
 
 <br />
 
-__*Get all available addons.*__
+Get all available addons.
 
----
-
-Argument | Value | Required? | Notes 
---- | --- | :---: | --- 
-
-<br />
-
-- Do this :
 ```js
 const { addon } = require("@slimio/registry-sdk");
 
@@ -207,23 +146,12 @@ addon().then(console.log).catch(console.error);
 ```
 </details>
 
-<br />
-
-<details><summary>addonName()</summary>
+<details><summary>addonName(name: string): Promise < addonInfos ></summary>
 
 <br />
 
-__*Get a given addon by his name.*__
+Get a given addon by his name.
 
----
-
-Argument | Value | Required? | Notes 
---- | --- | :---: | --- 
-name | String | ✅ | Addon name
-
-<br />
-
-- Do this :
 ```js
 const { addonName } = require("@slimio/registry-sdk");
 
@@ -257,22 +185,12 @@ addonName("name").then(console.log).catch(console.error);
 ```
 </details>
 
-<br />
-
-<details><summary>orga()</summary>
+<details><summary>orga(): Promise < listOrgas ></summary>
 
 <br />
 
-__*Get all organisations.*__
+Get all organisations.
 
----
-
-Argument | Value | Required? | Notes 
---- | --- | :---: | --- 
-
-<br />
-
-- Do this :
 ```js
 const { orga } = require("@slimio/registry-sdk");
 
@@ -292,23 +210,12 @@ orga().then(console.log).catch(console.error);
 ```
 </details>
 
-<br />
-
-<details><summary>orgaName()</summary>
+<details><summary>orgaName(name: string): Promise < orgaInfos ></summary>
 
 <br />
 
-__*Get an organisation by his name.*__
+Get an organisation by his name.
 
----
-
-Argument | Value | Required? | Notes 
---- | --- | :---: | --- 
-name | String | ✅ | Organisation name
-
-<br />
-
-- Do this :
 ```js
 const { orgaName } = require("@slimio/registry-sdk");
 
@@ -347,25 +254,12 @@ orgaName("name").then(console.log).catch(console.error);
 ```
 </details>
 
-<br />
-
-<details><summary>orgaAddUser()</summary>
+<details><summary>orgaAddUser(organame: string, username: string, token: string): Promise < orgaUserinfos ></summary>
 
 <br />
 
-__*Add a user to an organisation. This endpoint require an AccessToken.*__
+Add a user to an organisation. This endpoint require an AccessToken.
 
----
-
-Argument | Value | Required? | Notes 
---- | --- | :---: | --- 
-orgaName | String | ✅ | Organisation name
-newUsername | String | ✅ | User name to insert to organisation
-myToken | String | ✅ | My token obtained with login() 
-
-<br />
-
-- Do this :
 ```js
 const { login, orgaAddUser } = require("@slimio/registry-sdk");
 
