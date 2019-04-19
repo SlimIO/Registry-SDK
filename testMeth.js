@@ -2,10 +2,10 @@ const setOfMethods = require("./index");
 const { meta, login, users, addon, addonName, publish, orga, orgaName, orgaAddUser } = setOfMethods;
 
 async function test() {
-    const { uptime } = await meta();
+    const myToken = await login("admin1", "admin1953");
+    const { addonId } = await publish("/test", myToken);
 
-    // Return a number
-    console.log(uptime);
+    console.log(addonId);
 }
 
 test();

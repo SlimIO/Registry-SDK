@@ -47,6 +47,9 @@ const { uptime } = await meta();
 // Return a number
 console.log(uptime);
 ```
+
+<br />
+
 </details>
 
 <details><summary>login(username: string, password: string): Promise < AccessToken ></summary>
@@ -58,37 +61,34 @@ Authenticate a user and get an AccessToken.
 ```js
 const { login } = require("@slimio/registry-sdk");
 
-login("myUsername", "myPassword")
-    .then(console.log)
-    .catch(console.error);
-```
+const myToken = await login("admin1", "admin1953");
 
-- Return :
-```js
-string;
+// Return a random string.
+console.log("Your token is :", myToken);
 ```
+Return an AccessToken which will be required for some methods
+
+<br />
+
 </details>
 
 <details><summary>users(username: string, password: string): Promise < userId ></summary>
 
 <br />
 
-Create a new user.
+Create a new user with a new ID.
 
 ```js
 const { users } = require("@slimio/registry-sdk");
 
-users("newUsername", "newPassword")
-    .then(console.log)
-    .catch(console.error);
+const { userId } = users("newUsername", "newPassword");
+
+// Return a new ID 
+console.log(userId);
 ```
 
-- Return :
-```js
-{
-    userId: number;
-}
-```
+<br />
+
 </details>
 
 <details><summary>publish(addonMainDir: string, token: string): Promise < addonId ></summary>
@@ -102,22 +102,15 @@ Create or update an Addon release. This endpoint require an AccessToken.
 ```js
 const { login, publish } = require("@slimio/registry-sdk");
 
-async function main() {
-    const myToken = await login("myUsername", "myPassword");
-    const addonId = await publish("pathOfAddonMainDir", myToken);
+const myToken = await login("myUsername", "myPassword");
+const { addonId } = await publish("pathOfAddonMainDir", myToken);
 
-    return addonId;
-}
-
-main().then(console.log).catch(console.error);
-```
-
-- Return :
-```js
-{
-    addonId: number
+console.log(addonId);
 }
 ```
+
+<br />
+
 </details>
 
 <details><summary>addon(): Promise < addonsArray ></summary>
