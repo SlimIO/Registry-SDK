@@ -61,7 +61,7 @@ Authenticate a user and get an AccessToken.
 ```js
 const { login } = require("@slimio/registry-sdk");
 
-const myToken = await login("admin1", "admin1953");
+const myToken = await login("myLogin", "myPassword");
 
 // Return a random string.
 console.log("Your token is :", myToken);
@@ -100,13 +100,15 @@ Create or update an Addon release. This endpoint require an AccessToken.
 >⚠️ publish() to need that your main directory must contain package.json and slimio.toml files !
 
 ```js
+// Example :
+
 const { login, publish } = require("@slimio/registry-sdk");
 
-const myToken = await login("myUsername", "myPassword");
-const { addonId } = await publish("pathOfAddonMainDir", myToken);
+const myToken = await login("admin", "admin147");
+const { addonId } = await publish(__dirname, myToken);
 
+// Return the Id of the new addon
 console.log(addonId);
-}
 ```
 
 <br />
@@ -122,21 +124,15 @@ Get all available addons.
 ```js
 const { addon } = require("@slimio/registry-sdk");
 
-addon().then(console.log).catch(console.error);
+const addons = await addon();
+
+console.log(addons);
 ```
 
-- Return :
-```js
-[index: number]: string;
-```
-```js
-// Example :
-[
-    "memory",
-    "socket",
-    "etc."
-]
-```
+This method give you an array with the all addons name.
+
+<br />
+
 </details>
 
 <details><summary>addonName(name: string): Promise < addonInfos ></summary>
@@ -148,34 +144,14 @@ Get a given addon by his name.
 ```js
 const { addonName } = require("@slimio/registry-sdk");
 
-addonName("name").then(console.log).catch(console.error);
+// Example
+const { description, updateAt } = await addonName("memory");
+
+console.log(description, updateAt);
 ```
 
-- Return :
-```js
-{
-    name: string,
-    description: string,
-    git: string,
-    createdAt: Date,
-    updatedAt: Date,
-    author: {
-        username: string,
-        description: string
-    },
-    organisations: {
-        name: string,
-        createdAt: Date,
-        updatedAt: Date
-    },
-    version: [
-        {
-            version: string,
-            createdAt: string
-        }
-    ]
-}
-```
+This method return an object with all addon's informations. See [Registry](https://github.com/SlimIO/Registry) for more details.
+
 </details>
 
 <details><summary>orga(): Promise < listOrgas ></summary>
@@ -187,20 +163,16 @@ Get all organisations.
 ```js
 const { orga } = require("@slimio/registry-sdk");
 
-orga().then(console.log).catch(console.error);
+// Example
+const organisations = await orga();
+const organisationsName = Object.keys(organisations);
+
+// List organisations
+console.log(organisationsName);
 ```
 
-- Return :
-```js
-{
-    [name: string]: {
-        description: string,
-        owner: string,
-        users: string[]
-        addons: string[]
-    }
-}
-```
+This method returns an object where each key represents an organization. 
+
 </details>
 
 <details><summary>orgaName(name: string): Promise < orgaInfos ></summary>
@@ -212,39 +184,18 @@ Get an organisation by his name.
 ```js
 const { orgaName } = require("@slimio/registry-sdk");
 
-orgaName("name").then(console.log).catch(console.error);
-```
+// Example
+const { users } = await orgaName("SlimIO");
 
-- Return :
-```js
-{
-    name: string,
-    description: string,
-    createdAt: Date,
-    updatedAt: Date,
-    owner: {
-        username: string,
-        createdAt: Date,
-        updatedAt: Date
-    },
-    users: [
-        {
-            username: string,
-            createdAt: Date,
-            updatedAt: Date
-        }
-    ]
-    addons: [
-        {
-            name: string,
-            description: string,
-            git: string,
-            createdAt: Date,
-            updatedAt: Date
-        }
-    ]
+    console.log("This organisation contains the following users :");
+    for (const user of users) {
+        console.log(`- ${user.username}`);
+    }
 }
 ```
+
+This method return an object with all organisation's informations. See [Registry](https://github.com/SlimIO/Registry) for more details.
+
 </details>
 
 <details><summary>orgaAddUser(organame: string, username: string, token: string): Promise < orgaUserinfos ></summary>
@@ -254,30 +205,17 @@ orgaName("name").then(console.log).catch(console.error);
 Add a user to an organisation. This endpoint require an AccessToken.
 
 ```js
-const { login, orgaAddUser } = require("@slimio/registry-sdk");
+const { users, login, orgaAddUser } = require("@slimio/registry-sdk");
 
-async function main() {
-    // If the user to add desn't exist in the database, create this.
-    await users("newUsername", "newPassword");
+// If the user to add desn't exist in the database, create this.
+await users("newUsername", "newPassword");
 
-    const myToken = await login("myUsername", "myPassword");
-    const interfaceRet = await orgaAddUser("orgaName", "newUsername", myToken);
+const myToken = await login("myUsername", "myPassword");
+const { createdAt, userId } = await orgaAddUser("orgaName", "newUsername", myToken);
 
-    return interfaceRet;
-}
-
-main().then(console.log).catch(console.error);
+console.log(createdAt, userId);
 ```
-- Return :
 
-```js
-{
-    createdAt: date,
-    updatedAt: date,
-    organisationId: number,
-    userId: number
-}
-```
 </details>
 
 ## License

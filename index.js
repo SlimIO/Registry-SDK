@@ -1,6 +1,6 @@
 // Require Node.js dependencies
 const { readFile, readdir } = require("fs").promises;
-const { normalize, isAbsolute, join } = require("path");
+const { normalize, join } = require("path");
 
 // Require Third-party dependencies
 const { get, post } = require("httpie");
@@ -91,9 +91,6 @@ async function publish(addonMainDir, token) {
     ow(token, ow.string);
 
     const pathAddon = normalize(addonMainDir);
-    if (!isAbsolute(pathAddon)) {
-        throw new Error("The Addon main directory path is incorect");
-    }
     // Extract data
     try {
         const elemsMainDir = new Set(await readdir(pathAddon));
