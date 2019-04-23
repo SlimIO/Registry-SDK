@@ -66,7 +66,7 @@ const myToken = await login("myLogin", "myPassword");
 // Return a random string.
 console.log("Your token is :", myToken);
 ```
-Return an AccessToken which will be required for some methods
+This method return an AccessToken which will be required for some methods.
 
 <br />
 
@@ -207,6 +207,7 @@ Add a user to an organisation. This endpoint require an AccessToken.
 ```js
 const { users, login, orgaAddUser } = require("@slimio/registry-sdk");
 
+// Example
 // If the user to add desn't exist in the database, create this.
 await users("newUsername", "newPassword");
 
@@ -215,6 +216,9 @@ const { createdAt, userId } = await orgaAddUser("orgaName", "newUsername", myTok
 
 console.log(createdAt, userId);
 ```
+>⚠️ Only Organisation owner can use this method.
+
+This method return an object with the registration informations.
 
 </details>
 
