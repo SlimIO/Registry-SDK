@@ -20,79 +20,70 @@ $ yarn add @slimio/registry-sdk
 
 ## Usage example
 ```js
+require("dotenv").config();
 const { login } = require("@slimio/registry-sdk");
 
-const token = login("myUsername", "myPassword");
-
-// Return an Acces Token
-console.log(token);
+async function main() {
+    // Note: Never store your credentials in clear in the code (use a local .env file).
+    const accessToken = await login(process.env.LOGIN, process.env.PASSWORD);
+    console.log(accessToken);
+}
+main().catch(console.error);
 ```
 
 ## API
-This section describe how works the methods of Registry-SDK. For a complete definition, take a look at `index.d.ts` !  
-For more information on methods's return, see the documentation of the [Registry](https://github.com/SlimIO/Registry).
+This section describe the SDK methods. For a complete type definition, take a look at `index.d.ts` !
+For more information see the documentation of the [Registry](https://github.com/SlimIO/Registry).
+
+> ⚠️ In the following examples, we use top-level await
 
 
-<details><summary>meta(): Promise < MetaData ></summary>
-
+<details><summary>meta(): Promise< MetaData ></summary>
 <br />
 
-Return service metadata.
+Return the registry metadata. For the moment only the **uptime** property is available.
 
 ```js
+require("dotenv").config();
 const { meta } = require("@slimio/registry-sdk");
 
 const { uptime } = await meta();
-
-// Return a number
 console.log(uptime);
 ```
-
-<br />
-
 </details>
 
-<details><summary>login(username: string, password: string): Promise < AccessToken ></summary>
-
+<details><summary>login(username: string, password: string): Promise< string ></summary>
 <br />
 
-Authenticate a user and get an AccessToken.
+Authenticate a user and get an AccessToken string. This token will be required as argument by some of the other SDK methods.
 
 ```js
 const { login } = require("@slimio/registry-sdk");
 
-const myToken = await login("myLogin", "myPassword");
-
-// Return a random string.
-console.log("Your token is :", myToken);
+async function main() {
+    // Note: Never store your credentials in clear in the code (use a local .env file).
+    const accessToken = await login(process.env.LOGIN, process.env.PASSWORD);
+    console.log("Your access token: ", accessToken);
+}
+main().catch(console.error);
 ```
-This method return an AccessToken which will be required for some methods.
-
-<br />
-
 </details>
 
-<details><summary>users(username: string, password: string): Promise < userId ></summary>
-
+<details><summary>users(username: string, password: string): Promise< userId ></summary>
 <br />
 
 Create a new user with a new ID.
-
 ```js
 const { users } = require("@slimio/registry-sdk");
 
 const { userId } = users("newUsername", "newPassword");
 
-// Return a new ID 
+// Return a new ID
 console.log(userId);
 ```
-
-<br />
-
 </details>
 
-<details><summary>publish(addonMainDir: string, token: string): Promise < addonId ></summary>
-
+<details><summary>publish(addonMainDir: string, token: string): Promise< addonId ></summary>
 <br />
 
 Create or update an Addon release. This endpoint require an AccessToken.
@@ -110,37 +101,24 @@ const { addonId } = await publish(__dirname, myToken);
 // Return the Id of the new addon
 console.log(addonId);
 ```
-
-<br />
-
 </details>
 
-<details><summary>addon(): Promise < addonsArray ></summary>
-
+<details><summary>addon(): Promise< addonsArray ></summary>
 <br />
 
-Get all available addons.
-
+Get all available addons on the requested registry. This method return an Array of string containing addons names.
 ```js
 const { addon } = require("@slimio/registry-sdk");
 
 const addons = await addon();
-
 console.log(addons);
 ```
-
-This method give you an array with the all addons name.
-
-<br />
-
 </details>
 
-<details><summary>addonName(name: string): Promise < addonInfos ></summary>
-
+<details><summary>addonName(name: string): Promise< addonInfos ></summary>
 <br />
 
 Get a given addon by his name.
-
 ```js
 const { addonName } = require("@slimio/registry-sdk");
 
@@ -151,11 +129,9 @@ console.log(description, updateAt);
 ```
 
 This method return an object with all addon's informations. See [Registry](https://github.com/SlimIO/Registry) for more details.
-
 </details>
 
-<details><summary>orga(): Promise < listOrgas ></summary>
-
+<details><summary>orga(): Promise< listOrgas ></summary>
 <br />
 
 Get all organisations.
@@ -171,12 +147,10 @@ const organisationsName = Object.keys(organisations);
 console.log(organisationsName);
 ```
 
-This method returns an object where each key represents an organization. 
-
+This method returns an object where each key represents an organization.
 </details>
 
-<details><summary>orgaName(name: string): Promise < orgaInfos ></summary>
-
+<details><summary>orgaName(name: string): Promise< orgaInfos ></summary>
 <br />
 
 Get an organisation by his name.
@@ -195,11 +169,9 @@ const { users } = await orgaName("SlimIO");
 ```
 
 This method return an object with all organisation's informations. See [Registry](https://github.com/SlimIO/Registry) for more details.
-
 </details>
 
-<details><summary>orgaAddUser(organame: string, username: string, token: string): Promise < orgaUserinfos ></summary>
-
+<details><summary>orgaAddUser(organame: string, username: string, token: string): Promise< orgaUserinfos ></summary>
 <br />
 
 Add a user to an organisation. This endpoint require an AccessToken.
