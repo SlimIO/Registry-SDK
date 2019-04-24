@@ -1,12 +1,6 @@
-
 declare namespace RegistrySDK {
-
     interface MetaData {
         uptime: number
-    }
-    
-    interface AccessToken {
-        access_token: string
     }
 
     interface userId {
@@ -82,21 +76,21 @@ declare namespace RegistrySDK {
     }
 
     interface orgaUserinfos {
-        createdAt: date,
-        updatedAt: date,
+        createdAt: Date,
+        updatedAt: Date,
         organisationId: number,
         userId: number
     }
 
-    export function meta(): Promise <MetaData>;
-    export function login(username: string, password: string): Promise <AccessToken>;
-    export function users(username: string, password: string): Promise <userId>;
-    export function addon(): Promise <addonsArray>;
-    export function addonName(name: string): Promise <addonInfos>;
-    export function publish(addonMainDir: string, token: string): Promise <addonId>;
-    export function orga(): Promise <listOrgas>
-    export function orgaName(name: string): Promise <orgaInfos>
-    export function orgaAddUser(organame: string, username: string, token: string): Promise <orgaUserinfos>
+    export function meta(): Promise<MetaData>;
+    export function login(username: string, password: string): Promise<string>;
+    export function users(username: string, password: string): Promise<userId>;
+    export function addon(): Promise<addonsArray>;
+    export function addonName(name: string): Promise<addonInfos>;
+    export function publish(addonMainDir: string, token: string): Promise<addonId>;
+    export function orga(): Promise<listOrgas>
+    export function orgaName(name: string): Promise<orgaInfos>
+    export function orgaAddUser(organame: string, username: string, token: string): Promise<orgaUserinfos>
 }
 
 export as namespace RegistrySDK;
