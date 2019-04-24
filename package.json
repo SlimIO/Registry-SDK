@@ -11,7 +11,12 @@
         "coverage": "nyc npm test",
         "report": "nyc report --reporter=html"
     },
-    "keywords": [],
+    "keywords": [
+        "SlimIO",
+        "Registry",
+        "SDK",
+        "Node.js"
+    ],
     "author": "SlimIO",
     "license": "MIT",
     "dependencies": {
