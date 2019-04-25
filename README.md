@@ -35,7 +35,7 @@ main().catch(console.error);
 This section describe the SDK methods. For a complete type definition, take a look at `index.d.ts` !
 For more information see the documentation of the [Registry](https://github.com/SlimIO/Registry).
 
-> ⚠️ In the following examples, we use top-level await
+> ⚠️ In the following examples, we often use top-level await
 
 
 <details><summary>meta(): Promise< MetaData ></summary>
@@ -44,7 +44,6 @@ For more information see the documentation of the [Registry](https://github.com/
 Return the registry metadata. For the moment only the **uptime** property is available.
 
 ```js
-require("dotenv").config();
 const { meta } = require("@slimio/registry-sdk");
 
 const { uptime } = await meta();
@@ -52,12 +51,15 @@ console.log(uptime);
 ```
 </details>
 
+### Users methods
+
 <details><summary>login(username: string, password: string): Promise< string ></summary>
 <br />
 
 Authenticate a user and get an AccessToken string. This token will be required as argument by some of the other SDK methods.
 
 ```js
+require("dotenv").config();
 const { login } = require("@slimio/registry-sdk");
 
 async function main() {
@@ -83,6 +85,20 @@ console.log(userId);
 ```
 </details>
 
+### Addons methods
+
+<details><summary>addon(): Promise< string[] ></summary>
+<br />
+
+Get all available addons on the requested registry. This method return an Array of string containing addons names.
+```js
+const { addon } = require("@slimio/registry-sdk");
+
+const addons = await addon();
+console.log(addons);
+```
+</details>
+
 <details><summary>publish(addonMainDir: string, token: string): Promise< addonId ></summary>
 <br />
 
@@ -100,18 +116,6 @@ const { addonId } = await publish(__dirname, myToken);
 
 // Return the Id of the new addon
 console.log(addonId);
-```
-</details>
-
-<details><summary>addon(): Promise< addonsArray ></summary>
-<br />
-
-Get all available addons on the requested registry. This method return an Array of string containing addons names.
-```js
-const { addon } = require("@slimio/registry-sdk");
-
-const addons = await addon();
-console.log(addons);
 ```
 </details>
 
