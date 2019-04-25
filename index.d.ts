@@ -7,10 +7,6 @@ declare namespace RegistrySDK {
         userId: number
     }
 
-    interface addonsArray {
-        [index: number]: string
-    }
-
     interface addonInfos {
         name: string,
         description: string,
@@ -85,7 +81,7 @@ declare namespace RegistrySDK {
     export function meta(): Promise<MetaData>;
     export function login(username: string, password: string): Promise<string>;
     export function users(username: string, password: string): Promise<userId>;
-    export function addon(): Promise<addonsArray>;
+    export function addon(): Promise<string[]>;
     export function addonName(name: string): Promise<addonInfos>;
     export function publish(addonMainDir: string, token: string): Promise<addonId>;
     export function orga(): Promise<listOrgas>
