@@ -20,7 +20,7 @@
     "author": "SlimIO",
     "license": "MIT",
     "dependencies": {
-        "@slimio/manifest": "^0.2.1",
+        "@slimio/manifest": "^0.4.0",
         "httpie": "^1.1.1",
         "ow": "^0.12.0"
     },
