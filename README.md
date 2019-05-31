@@ -198,5 +198,13 @@ This method return an object with the registration informations.
 
 </details>
 
+## Dependencies
+
+|Name|Refactoring|Security Risk|Usage|
+|---|---|---|---|
+|[@slimio/manifest](https://github.com/SlimIO/Manifester#readme)|Minor|Low|SlimIO Manifest|
+|[httpie](https://github.com/lukeed/httpie#readme)|Minor|Low|HTTP Request|
+|[ow](https://github.com/sindresorhus/ow#readme)|Minor|Low|OW|
+
 ## License
 MIT
