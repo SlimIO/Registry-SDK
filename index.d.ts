@@ -80,13 +80,13 @@ declare namespace RegistrySDK {
 
     export function meta(): Promise<MetaData>;
     export function login(username: string, password: string): Promise<string>;
-    export function users(username: string, password: string): Promise<userId>;
-    export function addon(): Promise<string[]>;
-    export function addonName(name: string): Promise<addonInfos>;
-    export function publish(addonMainDir: string, token: string): Promise<addonId>;
-    export function orga(): Promise<listOrgas>
-    export function orgaName(name: string): Promise<orgaInfos>
-    export function orgaAddUser(organame: string, username: string, token: string): Promise<orgaUserinfos>
+    export function createAccount(username: string, password: string): Promise<userId>;
+    export function getAllAddons(): Promise<string[]>;
+    export function getOneAddon(name: string): Promise<addonInfos>;
+    export function publishAddon(addonDirectory: string, token: string): Promise<addonId>;
+    export function getAllOrganizations(): Promise<listOrgas>
+    export function getOneOrganization(name: string): Promise<orgaInfos>
+    export function orgaAddUser(orgaName: string, username: string, token: string): Promise<orgaUserinfos>
 }
 
 export as namespace RegistrySDK;
