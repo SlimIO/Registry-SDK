@@ -98,59 +98,41 @@ async function createAccount(username, password) {
  * @function publishAddon
  * @description Create or update an Addon release.
  * @memberof RegistrySDK#
- * @param {!string} addonMainDir Main path addon directory
+ * @param {!string} addonDirectory Main path addon directory
  * @param {!string} token Access token user
  * @returns {Promise<addonId>} Object with addonId key
  *
  * @throws {TypeError}
+ * @throws {Error}
  */
-async function publishAddon(addonMainDir, token) {
-    if (typeof addonMainDir !== "string") {
-        throw new TypeError("addonMainDir must be a string");
+async function publishAddon(addonDirectory, token) {
+    if (typeof addonDirectory !== "string") {
+        throw new TypeError("addonDirectory must be a string");
     }
     if (typeof token !== "string") {
         throw new TypeError("token must be a string");
     }
 
-    const pathAddon = normalize(addonMainDir);
-    // Extract data
-    try {
-        const elemsMainDir = new Set(await readdir(pathAddon));
-        if (!elemsMainDir.has("package.json")) {
-            throw new Error(`package.json doesn't exist in "${pathAddon}" !`);
-        }
-        if (!elemsMainDir.has("slimio.toml")) {
-            throw new Error(`slimio.toml doesn't exist in "${pathAddon}" !`);
-        }
-
-        const manifest = await Manifest.open(join(pathAddon, "slimio.toml"));
-        if (manifest.type !== "Addon") {
-            throw new Error("Your project isn't of addon type");
-        }
-
-        const readPkg = await readFile(join(pathAddon, "package.json"));
-        const pkgJSON = JSON.parse(readPkg);
-        const elems = {
-            description: pkgJSON.description,
-            git: pkgJSON.homepage,
-            name: manifest.name,
-            organisation: manifest.organisation || "Organisation",
-            version: manifest.version
-        };
-
-        // Query
-        const { data } = await post(new URL("/addon/publish", constants.registry_url), {
-            body: elems,
-            headers: {
-                Authorization: token
-            }
-        });
-
-        return data;
+    // Read SlimIO manifest
+    const manifest = await Manifest.open(join(addonDirectory, "slimio.toml"));
+    if (manifest.type !== "Addon") {
+        throw new Error("Your project must be an 'Addon'");
     }
-    catch (err) {
-        throw err;
-    }
+    const { name, version, organisation = "SlimIO" } = manifest.toJSON();
+
+    // Read package.json
+    const buf = await readFile(join(addonDirectory, "package.json"));
+    const { description = "", homepage: git } = JSON.parse(buf.toString());
+
+    // Query
+    const { data } = await post(new URL("/addon/publish", constants.registry_url), {
+        body: { description, git, name, organisation, version },
+        headers: {
+            Authorization: token
+        }
+    });
+
+    return data;
 }
 
 /**
