@@ -85,7 +85,7 @@ declare namespace RegistrySDK {
     export function getOneAddon(name: string): Promise<addonInfos>;
     export function publishAddon(addonDirectory: string, token: string): Promise<addonId>;
     export function getAllOrganizations(): Promise<listOrgas>
-    export function getOneOrganization(name: string): Promise<orgaInfos>
+    export function getOneOrganization(orgaName: string): Promise<orgaInfos>
     export function orgaAddUser(orgaName: string, username: string, token: string): Promise<orgaUserinfos>
     export namespace constants {
         export const registry_url: string | URL;

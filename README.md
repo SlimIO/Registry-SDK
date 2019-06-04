@@ -71,14 +71,14 @@ main().catch(console.error);
 ```
 </details>
 
-<details><summary>users(username: string, password: string): Promise< userId ></summary>
+<details><summary>createAccount(username: string, password: string): Promise< userId ></summary>
 <br />
 
 Create a new user with a new ID.
 ```js
-const { users } = require("@slimio/registry-sdk");
+const { createAccount } = require("@slimio/registry-sdk");
 
-const { userId } = users("newUsername", "newPassword");
+const { userId } = createAccount("newUsername", "newPassword");
 
 // Return a new ID
 console.log(userId);
@@ -87,47 +87,47 @@ console.log(userId);
 
 ### Addons methods
 
-<details><summary>addon(): Promise< string[] ></summary>
+<details><summary>getAllAddons(): Promise< string[] ></summary>
 <br />
 
 Get all available addons on the requested registry. This method return an Array of string containing addons names.
 ```js
-const { addon } = require("@slimio/registry-sdk");
+const { getAllAddons } = require("@slimio/registry-sdk");
 
-const addons = await addon();
+const addons = await getAllAddons();
 console.log(addons);
 ```
 </details>
 
-<details><summary>publish(addonMainDir: string, token: string): Promise< addonId ></summary>
+<details><summary>publishAddon(addonDirectory: string, token: string): Promise< addonId ></summary>
 <br />
 
 Create or update an Addon release. This endpoint require an AccessToken.
 
->⚠️ publish() to need that your main directory must contain package.json and slimio.toml files !
+>⚠️ publishAddon() to need that your main directory must contain package.json and slimio.toml files !
 
 ```js
 // Example :
 
-const { login, publish } = require("@slimio/registry-sdk");
+const { login, publishAddon } = require("@slimio/registry-sdk");
 
 const myToken = await login("admin", "admin147");
-const { addonId } = await publish(__dirname, myToken);
+const { addonId } = await publishAddon(__dirname, myToken);
 
 // Return the Id of the new addon
 console.log(addonId);
 ```
 </details>
 
-<details><summary>addonName(name: string): Promise< addonInfos ></summary>
+<details><summary>getOneAddon(addonName: string): Promise< addonInfos ></summary>
 <br />
 
 Get a given addon by his name.
 ```js
-const { addonName } = require("@slimio/registry-sdk");
+const { getOneAddon } = require("@slimio/registry-sdk");
 
 // Example
-const { description, updateAt } = await addonName("memory");
+const { description, updateAt } = await getOneAddon("memory");
 
 console.log(description, updateAt);
 ```
@@ -135,35 +135,34 @@ console.log(description, updateAt);
 This method return an object with all addon's informations. See [Registry](https://github.com/SlimIO/Registry) for more details.
 </details>
 
-<details><summary>orga(): Promise< listOrgas ></summary>
+<details><summary>getAllOrganizations(): Promise< listOrgas ></summary>
 <br />
 
 Get all organisations.
 
 ```js
-const { orga } = require("@slimio/registry-sdk");
+const { getAllOrganizations } = require("@slimio/registry-sdk");
 
 // Example
-const organisations = await orga();
-const organisationsName = Object.keys(organisations);
+const organisations = await getAllOrganizations();
 
 // List organisations
-console.log(organisationsName);
+console.log(Object.keys(organisations));
 ```
 
 This method returns an object where each key represents an organization.
 </details>
 
-<details><summary>orgaName(name: string): Promise< orgaInfos ></summary>
+<details><summary>getOneOrganization(orgaName: string): Promise< orgaInfos ></summary>
 <br />
 
 Get an organisation by his name.
 
 ```js
-const { orgaName } = require("@slimio/registry-sdk");
+const { getOneOrganization } = require("@slimio/registry-sdk");
 
 // Example
-const { users } = await orgaName("SlimIO");
+const { users } = await getOneOrganization("SlimIO");
 
     console.log("This organisation contains the following users :");
     for (const user of users) {
@@ -183,9 +182,8 @@ Add a user to an organisation. This endpoint require an AccessToken.
 ```js
 const { users, login, orgaAddUser } = require("@slimio/registry-sdk");
 
-// Example
-// If the user to add desn't exist in the database, create this.
-await users("newUsername", "newPassword");
+// (!) If the user doesn't exist on the Registry
+await createAccount("newUsername", "newPassword");
 
 const myToken = await login("myUsername", "myPassword");
 const { createdAt, userId } = await orgaAddUser("orgaName", "newUsername", myToken);
