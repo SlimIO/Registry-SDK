@@ -3,10 +3,10 @@
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/SlimIO/is/commit-activity)
 ![MIT](https://img.shields.io/github/license/mashape/apistatus.svg)
 
-Registry-SDK is a set methods to query the Registry API. A account will required for use this package. See [Registry](https://github.com/SlimIO/Registry).
+Registry-SDK is a bunch of methods to query the [SlimIO Registry API](https://github.com/SlimIO/Registry).
 
 ## Requirements
-- Node.js v10 or higher
+- [Node.js](https://nodejs.org/en/) version 10 or higher
 
 ## Getting Started
 
@@ -56,16 +56,18 @@ console.log(uptime);
 <details><summary>login(username: string, password: string): Promise< string ></summary>
 <br />
 
-Authenticate a user and get an AccessToken string. This token will be required as argument by some of the other SDK methods.
+Authenticate a user and return an AccessToken string. This token will be required as argument by some of the SDK methods.
 
 ```js
 require("dotenv").config();
-const { login } = require("@slimio/registry-sdk");
+const { login, publishAddon } = require("@slimio/registry-sdk");
 
 async function main() {
     // Note: Never store your credentials in clear in the code (use a local .env file).
     const accessToken = await login(process.env.LOGIN, process.env.PASSWORD);
     console.log("Your access token: ", accessToken);
+
+    await publishAddon("./addonDir", accessToken);
 }
 main().catch(console.error);
 ```
@@ -74,11 +76,11 @@ main().catch(console.error);
 <details><summary>createAccount(username: string, password: string): Promise< userId ></summary>
 <br />
 
-Create a new user with a new ID.
+Create a new user account on the registry.
 ```js
 const { createAccount } = require("@slimio/registry-sdk");
 
-const { userId } = createAccount("newUsername", "newPassword");
+const { userId } = await createAccount("newUsername", "newPassword");
 
 // Return a new ID
 console.log(userId);
@@ -86,6 +88,22 @@ console.log(userId);
 </details>
 
 ### Addons methods
+
+<details><summary>getOneAddon(addonName: string): Promise< addonInfos ></summary>
+<br />
+
+Get a given addon by his name.
+```js
+const { getOneAddon } = require("@slimio/registry-sdk");
+
+// Example
+const { description, updateAt } = await getOneAddon("memory");
+
+console.log(description, updateAt);
+```
+
+This method return an object with all addon's informations. See [Registry](https://github.com/SlimIO/Registry) for more details.
+</details>
 
 <details><summary>getAllAddons(): Promise< string[] ></summary>
 <br />
@@ -119,21 +137,7 @@ console.log(addonId);
 ```
 </details>
 
-<details><summary>getOneAddon(addonName: string): Promise< addonInfos ></summary>
-<br />
-
-Get a given addon by his name.
-```js
-const { getOneAddon } = require("@slimio/registry-sdk");
-
-// Example
-const { description, updateAt } = await getOneAddon("memory");
-
-console.log(description, updateAt);
-```
-
-This method return an object with all addon's informations. See [Registry](https://github.com/SlimIO/Registry) for more details.
-</details>
+### Organizations methods
 
 <details><summary>getAllOrganizations(): Promise< listOrgas ></summary>
 <br />
@@ -164,10 +168,9 @@ const { getOneOrganization } = require("@slimio/registry-sdk");
 // Example
 const { users } = await getOneOrganization("SlimIO");
 
-    console.log("This organisation contains the following users :");
-    for (const user of users) {
-        console.log(`- ${user.username}`);
-    }
+console.log("SlimIO Users:");
+for (const user of users) {
+    console.log(`- ${user.username}`);
 }
 ```
 
