@@ -64,7 +64,7 @@ japa.group("Registry SDK", (group) => {
         await writeFile(join(REG_DIR, ".env"), buf.toString());
 
         // Npm start
-        cp = spawn(`npm${EXEC_SUFFIX ? ".cmd" : ""}`, ["start"], {
+        cp = spawn(process.argv[0], ["index.js"], {
             cwd: REG_DIR, stdio: "inherit"
         });
 
@@ -73,9 +73,7 @@ japa.group("Registry SDK", (group) => {
     });
 
     group.after(async() => {
-        if (cp !== null) {
-            cp.kill();
-        }
+        cp.kill();
         await new Promise((resolve) => setTimeout(resolve, 1000));
         await del([REG_DIR]);
     });
