@@ -7,9 +7,10 @@ const { get, post } = require("httpie");
 const ow = require("ow");
 const Manifest = require("@slimio/manifest");
 
-// Constantes
-const PORT = 1337;
-const REGISTRY_URL = new URL(`http://localhost:${PORT}`);
+// CONSTANTS
+const constants = {
+    registry_url: new URL("http://localhost:1338")
+};
 
 /**
  * @typedef {Object} MetaData
@@ -22,7 +23,7 @@ const REGISTRY_URL = new URL(`http://localhost:${PORT}`);
  * @returns {Promise<MetaData>} Object of the request with uptime key
  */
 async function meta() {
-    return (await get(REGISTRY_URL)).data;
+    return (await get(constants.registry_url)).data;
 }
 
 /**
@@ -42,7 +43,7 @@ async function login(username, password) {
     ow(username, ow.string);
     ow(password, ow.string);
 
-    const { data } = await post(new URL("/login", REGISTRY_URL), {
+    const { data } = await post(new URL("/login", constants.registry_url), {
         body: { username, password }
     });
 
@@ -66,7 +67,7 @@ async function users(username, password) {
     ow(username, ow.string);
     ow(password, ow.string);
 
-    const { data } = await post(new URL("/users", REGISTRY_URL), {
+    const { data } = await post(new URL("/users", constants.registry_url), {
         body: { username, password }
     });
 
@@ -116,7 +117,7 @@ async function publish(addonMainDir, token) {
             version: manifest.version
         };
         // Query
-        const { data } = await post(new URL("/addon/publish", REGISTRY_URL), {
+        const { data } = await post(new URL("/addon/publish", constants.registry_url), {
             body: elems,
             headers: {
                 Authorization: token
@@ -137,7 +138,7 @@ async function publish(addonMainDir, token) {
  * @returns {Promise<Array<String>>} Addon array
  */
 async function addon() {
-    return (await get(new URL("/addon", REGISTRY_URL))).data;
+    return (await get(new URL("/addon", constants.registry_url))).data;
 }
 
 /**
@@ -154,7 +155,7 @@ async function addonName(name) {
     // Check if arguments are strings
     ow(name, ow.string);
 
-    return (await get(new URL(`/addon/${name}`, REGISTRY_URL))).data;
+    return (await get(new URL(`/addon/${name}`, constants.registry_url))).data;
 }
 
 /**
@@ -168,7 +169,7 @@ async function addonName(name) {
  * @returns {Promise<listOrgas>} Object with organisations infos
  */
 async function orga() {
-    return (await get(new URL("/organisation", REGISTRY_URL))).data;
+    return (await get(new URL("/organisation", constants.registry_url))).data;
 }
 
 /**
@@ -185,7 +186,7 @@ async function orgaName(name) {
     // Check if arguments are strings
     ow(name, ow.string);
 
-    return (await get(new URL(`/organisation/${name}`, REGISTRY_URL))).data;
+    return (await get(new URL(`/organisation/${name}`, constants.registry_url))).data;
 }
 
 /**
@@ -207,7 +208,7 @@ async function orgaAddUser(organame, username, token) {
     ow(token, ow.string);
 
     const resource = `/organisation/${organame}/${username}`;
-    const { data } = await post(new URL(resource, REGISTRY_URL), {
+    const { data } = await post(new URL(resource, constants.registry_url), {
         headers: {
             Authorization: token
         }
@@ -216,7 +217,8 @@ async function orgaAddUser(organame, username, token) {
     return data;
 }
 
-module.exports = {
+module.exports = Object.freeze({
+    constants,
     meta,
     login,
     users,
@@ -226,6 +228,6 @@ module.exports = {
     orga,
     orgaName,
     orgaAddUser
-};
+});
 
 
