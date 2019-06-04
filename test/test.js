@@ -79,4 +79,24 @@ japa.group("Registry SDK", (group) => {
         await new Promise((resolve) => setTimeout(resolve, 1000));
         await del([REG_DIR]);
     });
+
+    japa("Check exported members", (assert) => {
+        assert.isTrue(Object.isFrozen(registrySDK));
+        assert.isTrue(is.plainObject(registrySDK));
+        assert.deepEqual(Object.keys(registrySDK), [
+            "constants", "meta", "login", "createAccount", "publishAddon",
+            "getAllAddons", "getOneAddon", "getAllOrganizations",
+            "getOneOrganization", "orgaAddUser"
+        ]);
+        assert.isTrue(is.plainObject(registrySDK.constants));
+        assert.deepEqual(Object.keys(registrySDK.constants), ["registry_url"]);
+        assert.isTrue(registrySDK.constants.registry_url instanceof URL);
+    });
+
+    japa("Get metadata", async(assert) => {
+        const meta = await registrySDK.meta();
+        assert.isTrue(is.plainObject(meta));
+        assert.deepEqual(Object.keys(meta), ["uptime"]);
+        assert.isTrue(typeof meta.uptime === "number");
+    });
 });
