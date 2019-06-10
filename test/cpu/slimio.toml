@@ -1,0 +1,4 @@
+name = "cpu"
+version = "1.0.0"
+type = "Addon"
+org = "SlimIO"

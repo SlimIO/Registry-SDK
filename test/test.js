@@ -23,6 +23,7 @@ const REG_DIR = join(__dirname, "registry");
 const EXEC_SUFFIX = process.platform === "win32";
 
 japa.group("Registry SDK", (group) => {
+    let accessToken;
     group.before(async() => {
         const spin1 = ora("Deleting ./registry").start();
         try {
@@ -96,5 +97,24 @@ japa.group("Registry SDK", (group) => {
         assert.isTrue(is.plainObject(meta));
         assert.deepEqual(Object.keys(meta), ["uptime"]);
         assert.isTrue(typeof meta.uptime === "number");
+    });
+
+    japa("Get addons", async(assert) => {
+        const addons = await registrySDK.getAllAddons();
+        assert.deepEqual(addons, []);
+    });
+
+    japa("Create new account", async(assert) => {
+        const { userId } = await registrySDK.createAccount("fraxken", "p@ssword");
+        assert.isTrue(typeof userId === "number");
+        assert.strictEqual(userId, 1);
+
+        accessToken = await registrySDK.login("fraxken", "p@ssword");
+        assert.isTrue(typeof accessToken === "string");
+    });
+
+    japa("Publish a test addon", async(assert) => {
+        const ret = await registrySDK.publishAddon(join(__dirname, "cpu"), accessToken);
+        console.log(ret);
     });
 });
