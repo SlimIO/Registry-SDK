@@ -71,6 +71,7 @@ japa.group("Registry SDK", (group) => {
 
         // Wait for the registry to be started!
         await new Promise((resolve) => setTimeout(resolve, 1000));
+        console.log("\n");
     });
 
     group.after(async() => {
@@ -113,8 +114,16 @@ japa.group("Registry SDK", (group) => {
         assert.isTrue(typeof accessToken === "string");
     });
 
-    japa("Publish a test addon", async(assert) => {
+    japa("Publish cpu addon", async(assert) => {
         const ret = await registrySDK.publishAddon(join(__dirname, "cpu"), accessToken);
-        console.log(ret);
+        assert.isTrue(is.plainObject(ret));
+        assert.equal(ret.addonId, 1);
+
+        const cpu = await registrySDK.getOneAddon("cpu");
+        assert.equal(cpu.name, "cpu");
+        assert.isTrue(is.plainObject(cpu.author));
+        assert.equal(cpu.author.username, "fraxken");
+        assert.equal(cpu.description, "My package description here!");
+        assert.equal(cpu.organisation, null);
     });
 });

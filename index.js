@@ -118,18 +118,19 @@ async function publishAddon(addonDirectory, token) {
     if (manifest.type !== "Addon") {
         throw new Error("Your project must be an 'Addon'");
     }
-    const { name, version, organisation = "SlimIO" } = manifest.toJSON();
+    const { name, version, org } = manifest.toJSON();
 
     // Read package.json
     const buf = await readFile(join(addonDirectory, "package.json"));
     const { description = "", homepage: git } = JSON.parse(buf.toString());
+    const body = { description, git, name, version };
+    if (typeof org === "string") {
+        Reflect.set(body, "organization", org);
+    }
 
     // Query
     const { data } = await post(new URL("/addon/publish", constants.registry_url), {
-        body: { description, git, name, organisation, version },
-        headers: {
-            Authorization: token
-        }
+        body, headers: { Authorization: token }
     });
 
     return data;

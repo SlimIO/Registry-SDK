@@ -17,7 +17,7 @@ declare namespace RegistrySDK {
             username: string,
             description: string
         },
-        organisations: {
+        organisation: {
             name: string,
             createdAt: Date,
             updatedAt: Date
