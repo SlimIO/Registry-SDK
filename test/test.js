@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 // Require Node.js dependencies
 const fs = require("fs");
 const { writeFile, readFile, access } = fs.promises;
@@ -61,8 +63,23 @@ japa.group("Registry SDK", (group) => {
         });
 
         // Create .env file
-        const buf = await readFile(join(__dirname, "envdata.txt"));
-        await writeFile(join(REG_DIR, ".env"), buf.toString());
+        const buf = await readFile(join(__dirname, "envdata.txt"), "utf-8");
+        await writeFile(join(REG_DIR, ".env"), buf.concat(`GIT_TOKEN=${process.env.GIT_TOKEN}`));
+
+        const hydrateSpin = ora("Hydrate SQLite database").start();
+        await new Promise((resolve, reject) => {
+            const TTYStream = spawn(process.argv[0], ["scripts/hydrate.js"], {
+                cwd: REG_DIR, stdio: "ignore"
+            });
+            TTYStream.once("close", () => {
+                hydrateSpin.succeed();
+                resolve();
+            });
+            TTYStream.once("error", (err) => {
+                hydrateSpin.fail(err.message);
+                reject(err);
+            });
+        });
 
         // Npm start
         cp = spawn(process.argv[0], ["index.js"], {
@@ -102,25 +119,25 @@ japa.group("Registry SDK", (group) => {
 
     japa("Get addons", async(assert) => {
         const addons = await registrySDK.getAllAddons();
-        assert.deepEqual(addons, []);
+        assert.deepEqual(addons, ["cpu-addon", "ihm"]);
     });
 
     japa("Create new account", async(assert) => {
         const { userId } = await registrySDK.createAccount("fraxken", "p@ssword");
         assert.isTrue(typeof userId === "number");
-        assert.strictEqual(userId, 1);
+        assert.strictEqual(userId, 2);
 
         accessToken = await registrySDK.login("fraxken", "p@ssword");
         assert.isTrue(typeof accessToken === "string");
     });
 
-    japa("Publish cpu addon", async(assert) => {
-        const ret = await registrySDK.publishAddon(join(__dirname, "cpu"), accessToken);
+    japa("Publish noa addon", async(assert) => {
+        const ret = await registrySDK.publishAddon(join(__dirname, "noa"), accessToken);
         assert.isTrue(is.plainObject(ret));
-        assert.equal(ret.addonId, 1);
+        assert.equal(ret.addonId, 3);
 
-        const cpu = await registrySDK.getOneAddon("cpu");
-        assert.equal(cpu.name, "cpu");
+        const cpu = await registrySDK.getOneAddon("noa");
+        assert.equal(cpu.name, "noa");
         assert.isTrue(is.plainObject(cpu.author));
         assert.equal(cpu.author.username, "fraxken");
         assert.equal(cpu.description, "My package description here!");
