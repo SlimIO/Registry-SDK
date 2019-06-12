@@ -11,6 +11,12 @@ const constants = {
     registry_url: new URL("http://localhost:1338")
 };
 
+function isString(arg, argName) {
+    if (typeof arg !== "string") {
+        throw new TypeError(`${argName} must be a string`);
+    }
+}
+
 /**
  * @namespace RegistrySDK
  */
@@ -43,12 +49,8 @@ async function meta() {
  * @throws {TypeError}
  */
 async function login(username, password) {
-    if (typeof username !== "string") {
-        throw new TypeError("username must be a string");
-    }
-    if (typeof password !== "string") {
-        throw new TypeError("password must be a string");
-    }
+    isString(username, "username");
+    isString(password, "password");
 
     const { data } = await post(new URL("/login", constants.registry_url), {
         body: { username, password }
@@ -74,12 +76,8 @@ async function login(username, password) {
  * @throws {TypeError}
  */
 async function createAccount(username, password) {
-    if (typeof username !== "string") {
-        throw new TypeError("username must be a string");
-    }
-    if (typeof password !== "string") {
-        throw new TypeError("password must be a string");
-    }
+    isString(username, "username");
+    isString(password, "password");
 
     const { data } = await post(new URL("/users", constants.registry_url), {
         body: { username, password }
@@ -106,12 +104,8 @@ async function createAccount(username, password) {
  * @throws {Error}
  */
 async function publishAddon(addonDirectory, token) {
-    if (typeof addonDirectory !== "string") {
-        throw new TypeError("addonDirectory must be a string");
-    }
-    if (typeof token !== "string") {
-        throw new TypeError("token must be a string");
-    }
+    isString(addonDirectory, "addonDirectory");
+    isString(token, "token");
 
     // Read SlimIO manifest
     const manifest = await Manifest.open(join(addonDirectory, "slimio.toml"));
@@ -158,9 +152,7 @@ async function getAllAddons() {
  * @throws {TypeError}
  */
 async function getOneAddon(addonName) {
-    if (typeof addonName !== "string") {
-        throw new TypeError("addonName must be a string");
-    }
+    isString(addonName, "addonName");
 
     return (await get(new URL(`/addon/${addonName}`, constants.registry_url))).data;
 }
@@ -191,9 +183,7 @@ async function getAllOrganizations() {
  * @throws {TypeError}
  */
 async function getOneOrganization(orgaName) {
-    if (typeof orgaName !== "string") {
-        throw new TypeError("orgaName must be a string");
-    }
+    isString(orgaName, "orgaName");
 
     return (await get(new URL(`/organisation/${orgaName}`, constants.registry_url))).data;
 }
@@ -211,15 +201,9 @@ async function getOneOrganization(orgaName) {
  * @throws {TypeError}
  */
 async function orgaAddUser(orgaName, username, token) {
-    if (typeof orgaName !== "string") {
-        throw new TypeError("orgaName must be a string");
-    }
-    if (typeof username !== "string") {
-        throw new TypeError("username must be a string");
-    }
-    if (typeof token !== "string") {
-        throw new TypeError("token must be a string");
-    }
+    isString(orgaName, "orgaName");
+    isString(username, "username");
+    isString(token, "token");
 
     const resource = `/organisation/${orgaName}/${username}`;
     const { data } = await post(new URL(resource, constants.registry_url), {

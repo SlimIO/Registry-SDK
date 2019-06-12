@@ -143,4 +143,24 @@ japa.group("Registry SDK", (group) => {
         assert.equal(cpu.description, "My package description here!");
         assert.equal(cpu.organisation, null);
     });
+
+    japa("Get all or one orga", async(assert) => {
+        const orgs = await registrySDK.getAllOrganizations();
+        assert.deepEqual(Object.keys(orgs), ["SlimIO"]);
+        assert.equal(orgs.SlimIO.description, "SlimIO Official Organisation");
+        assert.equal(orgs.SlimIO.owner, "administrator");
+        assert.deepEqual(orgs.SlimIO.users, []);
+        assert.deepEqual(orgs.SlimIO.addons, ["cpu-addon", "ihm"]);
+
+        const SlimIO = await registrySDK.getOneOrganization("SlimIO");
+        assert.equal(SlimIO.name, "SlimIO");
+    });
+
+    japa("Add fraxken to the SlimIO Organization", async(assert) => {
+        const adminToken = await registrySDK.login("administrator", "administrator");
+        await registrySDK.orgaAddUser("SlimIO", "fraxken", adminToken);
+
+        const SlimIO = await registrySDK.getOneOrganization("SlimIO");
+        assert.deepEqual(SlimIO.users, [{ username: "fraxken" }]);
+    });
 });
