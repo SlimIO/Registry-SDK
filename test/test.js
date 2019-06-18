@@ -128,7 +128,7 @@ japa.group("Registry SDK", (group) => {
 
         accessToken = await registrySDK.login("administrator", "administrator");
         assert.isTrue(typeof accessToken === "string");
-    });
+    }).timeout(5000);
 
     japa("Publish noa addon", async(assert) => {
         const ret = await registrySDK.publishAddon(join(__dirname, "noa"), accessToken);
