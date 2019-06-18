@@ -76,17 +76,14 @@ main().catch(console.error);
 ```
 </details>
 
-<details><summary>createAccount(username: string, password: string): Promise< userId ></summary>
+<details><summary>createAccount(username: string, password: string, email: string): Promise< void ></summary>
 <br />
 
 Create a new user account on the registry.
 ```js
 const { createAccount } = require("@slimio/registry-sdk");
 
-const { userId } = await createAccount("newUsername", "newPassword");
-
-// Return a new ID
-console.log(userId);
+await createAccount("newUsername", "newPassword", "yourmail@dot.com");
 ```
 </details>
 

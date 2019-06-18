@@ -71,19 +71,19 @@ async function login(username, password) {
  * @memberof RegistrySDK#
  * @param {!string} username User name
  * @param {!string} password User password
- * @returns {Promise<userId>} Object of the request with userId key
+ * @param {!string} email User email
+ * @returns {Promise<void>} Object of the request with userId key
  *
  * @throws {TypeError}
  */
-async function createAccount(username, password) {
+async function createAccount(username, password, email) {
     isString(username, "username");
     isString(password, "password");
+    isString(pasemailsword, "email");
 
-    const { data } = await post(new URL("/users", constants.registry_url), {
-        body: { username, password }
+    await post(new URL("/users", constants.registry_url), {
+        body: { username, password, email }
     });
-
-    return data;
 }
 
 /**

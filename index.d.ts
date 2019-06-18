@@ -3,10 +3,6 @@ declare namespace RegistrySDK {
         uptime: number
     }
 
-    interface userId {
-        userId: number
-    }
-
     interface addonInfos {
         name: string,
         description: string,
@@ -80,7 +76,7 @@ declare namespace RegistrySDK {
 
     export function meta(): Promise<MetaData>;
     export function login(username: string, password: string): Promise<string>;
-    export function createAccount(username: string, password: string): Promise<userId>;
+    export function createAccount(username: string, password: string, email: string): Promise<void>;
     export function getAllAddons(): Promise<string[]>;
     export function getOneAddon(name: string): Promise<addonInfos>;
     export function publishAddon(addonDirectory: string, token: string): Promise<addonId>;
