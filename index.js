@@ -79,7 +79,7 @@ async function login(username, password) {
 async function createAccount(username, password, email) {
     isString(username, "username");
     isString(password, "password");
-    isString(pasemailsword, "email");
+    isString(email, "email");
 
     await post(new URL("/users", constants.registry_url), {
         body: { username, password, email }

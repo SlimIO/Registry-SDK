@@ -123,11 +123,10 @@ japa.group("Registry SDK", (group) => {
     });
 
     japa("Create new account", async(assert) => {
-        const { userId } = await registrySDK.createAccount("fraxken", "p@ssword");
-        assert.isTrue(typeof userId === "number");
-        assert.strictEqual(userId, 2);
+        const ret = await registrySDK.createAccount("fraxken", "p@ssword", "test@gmail.com");
+        assert.isTrue(typeof ret === "undefined");
 
-        accessToken = await registrySDK.login("fraxken", "p@ssword");
+        accessToken = await registrySDK.login("administrator", "administrator");
         assert.isTrue(typeof accessToken === "string");
     });
 
@@ -136,12 +135,12 @@ japa.group("Registry SDK", (group) => {
         assert.isTrue(is.plainObject(ret));
         assert.equal(ret.addonId, 3);
 
-        const cpu = await registrySDK.getOneAddon("noa");
-        assert.equal(cpu.name, "noa");
-        assert.isTrue(is.plainObject(cpu.author));
-        assert.equal(cpu.author.username, "fraxken");
-        assert.equal(cpu.description, "My package description here!");
-        assert.equal(cpu.organisation, null);
+        const addon = await registrySDK.getOneAddon("noa");
+        assert.equal(addon.name, "noa");
+        assert.isTrue(is.plainObject(addon.author));
+        assert.equal(addon.author.username, "administrator");
+        assert.equal(addon.description, "My package description here!");
+        assert.equal(addon.organisation, null);
     });
 
     japa("Get all or one orga", async(assert) => {
@@ -157,8 +156,7 @@ japa.group("Registry SDK", (group) => {
     });
 
     japa("Add fraxken to the SlimIO Organization", async(assert) => {
-        const adminToken = await registrySDK.login("administrator", "administrator");
-        await registrySDK.orgaAddUser("SlimIO", "fraxken", adminToken);
+        await registrySDK.orgaAddUser("SlimIO", "fraxken", accessToken);
 
         const SlimIO = await registrySDK.getOneOrganization("SlimIO");
         assert.deepEqual(SlimIO.users, [{ username: "fraxken" }]);
