@@ -31,7 +31,7 @@
         "cross-env": "^5.2.0",
         "del": "^5.0.0",
         "dotenv": "^8.0.0",
-        "eslint": "^5.16.0",
+        "eslint": "^6.1.0",
         "husky": "^2.3.0",
         "isomorphic-git": "^0.55.2",
         "japa": "^2.0.10",
