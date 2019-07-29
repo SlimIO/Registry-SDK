@@ -1,6 +1,8 @@
+"use strict";
+
 // Require Node.js dependencies
-const { readFile, readdir } = require("fs").promises;
-const { normalize, join } = require("path");
+const { readFile } = require("fs").promises;
+const { join } = require("path");
 
 // Require Third-party dependencies
 const { get, post } = require("httpie");
@@ -11,6 +13,12 @@ const constants = {
     registry_url: new URL("http://localhost:1338")
 };
 
+/**
+ * @function isString
+ * @param {string} arg
+ * @param {string} argName
+ * @returns {void}
+ */
 function isString(arg, argName) {
     if (typeof arg !== "string") {
         throw new TypeError(`${argName} must be a string`);
@@ -22,7 +30,7 @@ function isString(arg, argName) {
  */
 
 /**
- * @typedef {Object} MetaData
+ * @typedef {object} MetaData
  * @property {number} uptime Service metadata.
  */
 
@@ -44,7 +52,7 @@ async function meta() {
  * @memberof RegistrySDK#
  * @param {!string} username User name
  * @param {!string} password User password
- * @returns {Promise<String>} Object of the request with access_token key
+ * @returns {Promise<string>} Object of the request with access_token key
  *
  * @throws {TypeError}
  */
@@ -60,7 +68,7 @@ async function login(username, password) {
 }
 
 /**
- * @typedef {Object} userId
+ * @typedef {object} userId
  * @property {number} userId user Id in number
  */
 
@@ -87,7 +95,7 @@ async function createAccount(username, password, email) {
 }
 
 /**
- * @typedef {Object} addonId
+ * @typedef {object} addonId
  * @property {number} addonId Addon id
  */
 
@@ -135,7 +143,7 @@ async function publishAddon(addonDirectory, token) {
  * @function getAllAddons
  * @description Get all available addons.
  * @memberof RegistrySDK#
- * @returns {Promise<Array<String>>} Addon array
+ * @returns {Promise<Array<string>>} Addon array
  */
 async function getAllAddons() {
     return (await get(new URL("/addon", constants.registry_url))).data;
@@ -147,7 +155,7 @@ async function getAllAddons() {
  * @description Get a given addon by his name.
  * @memberof RegistrySDK#
  * @param {!string} addonName Addon name
- * @returns {Promise<Object>} Object with addon infos
+ * @returns {Promise<object>} Object with addon infos
  *
  * @throws {TypeError}
  */
@@ -158,7 +166,7 @@ async function getOneAddon(addonName) {
 }
 
 /**
- * @typedef {Object} listOrgas
+ * @typedef {object} listOrgas
  * @property {string} name
  */
 /**
@@ -178,7 +186,7 @@ async function getAllOrganizations() {
  * @description Get an organisation by his name
  * @memberof RegistrySDK#
  * @param {!string} orgaName Organisation name
- * @returns {Promise<Object>} Object with organisation infos
+ * @returns {Promise<object>} Object with organisation infos
  *
  * @throws {TypeError}
  */
@@ -196,7 +204,7 @@ async function getOneOrganization(orgaName) {
  * @param {!string} orgaName Organisation name
  * @param {!string} username User name
  * @param {!string} token User token
- * @returns {Promise<Object>} Object with organisation and user infos
+ * @returns {Promise<object>} Object with organisation and user infos
  *
  * @throws {TypeError}
  */
