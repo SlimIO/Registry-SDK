@@ -1,61 +1,65 @@
 {
-    "name": "@slimio/registry-sdk",
-    "version": "0.1.0",
-    "description": "Node.js SDK for Registry API",
-    "main": "index.js",
-    "scripts": {
-        "prepublishOnly": "pkg-ok",
-        "test": "cross-env psp && node test/test.js",
-        "doc": "jsdoc -c ./jsdoc.json -r -R ./README.md -P ./package.json --verbose",
-        "coverage": "nyc npm test",
-        "report": "nyc report --reporter=html"
-    },
-    "keywords": [
-        "SlimIO",
-        "Registry",
-        "SDK",
-        "Node.js"
-    ],
-    "author": "SlimIO",
-    "license": "MIT",
-    "dependencies": {
-        "@slimio/manifest": "^0.6.0",
-        "httpie": "^1.1.2"
-    },
-    "devDependencies": {
-        "@commitlint/cli": "^8.1.0",
-        "@commitlint/config-conventional": "^8.1.0",
-        "@escommunity/minami": "^1.0.0",
-        "@slimio/eslint-config": "^3.0.2",
-        "@slimio/is": "^1.5.1",
-        "@slimio/psp": "^0.5.4",
-        "cross-env": "^5.2.0",
-        "del": "^5.0.0",
-        "dotenv": "^8.0.0",
-        "eslint": "^6.1.0",
-        "husky": "^3.0.2",
-        "isomorphic-git": "^0.57.1",
-        "japa": "^2.0.10",
-        "jsdoc": "^3.6.3",
-        "nyc": "^14.1.1",
-        "ora": "^3.4.0",
-        "pkg-ok": "^2.3.1"
-    },
-    "engines": {
-        "node": ">=10"
-    },
-    "husky": {
-        "hooks": {
-            "pre-push": "cross-env eslint index.js && npm test",
-            "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-        }
-    },
-    "nyc": {
-        "check-coverage": true,
-        "per-file": false,
-        "lines": 98,
-        "statements": 98,
-        "functions": 98,
-        "branches": 90
+  "name": "@slimio/registry-sdk",
+  "version": "0.1.0",
+  "description": "Node.js SDK for Registry API",
+  "main": "index.js",
+  "scripts": {
+    "prepublishOnly": "pkg-ok",
+    "test": "cross-env psp && node test/test.js",
+    "doc": "jsdoc -c ./jsdoc.json -r -R ./README.md -P ./package.json --verbose",
+    "coverage": "nyc npm test",
+    "report": "nyc report --reporter=html",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
+  },
+  "keywords": [
+    "SlimIO",
+    "Registry",
+    "SDK",
+    "Node.js"
+  ],
+  "author": "SlimIO",
+  "license": "MIT",
+  "dependencies": {
+    "@slimio/manifest": "^0.6.0",
+    "httpie": "^1.1.2",
+    "snyk": "^1.208.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^8.1.0",
+    "@commitlint/config-conventional": "^8.1.0",
+    "@escommunity/minami": "^1.0.0",
+    "@slimio/eslint-config": "^3.0.2",
+    "@slimio/is": "^1.5.1",
+    "@slimio/psp": "^0.5.4",
+    "cross-env": "^5.2.0",
+    "del": "^5.0.0",
+    "dotenv": "^8.0.0",
+    "eslint": "^6.1.0",
+    "husky": "^3.0.2",
+    "isomorphic-git": "^0.57.1",
+    "japa": "^2.0.10",
+    "jsdoc": "^3.6.3",
+    "nyc": "^14.1.1",
+    "ora": "^3.4.0",
+    "pkg-ok": "^2.3.1"
+  },
+  "engines": {
+    "node": ">=10"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "cross-env eslint index.js && npm test",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
+  },
+  "nyc": {
+    "check-coverage": true,
+    "per-file": false,
+    "lines": 98,
+    "statements": 98,
+    "functions": 98,
+    "branches": 90
+  },
+  "snyk": true
 }
