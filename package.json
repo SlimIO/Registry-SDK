@@ -39,7 +39,7 @@
         "dotenv": "^8.1.0",
         "eslint": "^6.2.2",
         "husky": "^3.0.4",
-        "isomorphic-git": "^0.58.2",
+        "isomorphic-git": "^0.64.5",
         "japa": "^2.0.10",
         "jsdoc": "^3.6.3",
         "nyc": "^14.1.1",
