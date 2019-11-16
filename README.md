@@ -10,7 +10,7 @@
 Registry-SDK is a bunch of methods to query the [SlimIO Registry API](https://github.com/SlimIO/Registry).
 
 ## Requirements
-- [Node.js](https://nodejs.org/en/) version 10 or higher
+- [Node.js](https://nodejs.org/en/) version 12 or higher
 
 ## Getting Started
 
