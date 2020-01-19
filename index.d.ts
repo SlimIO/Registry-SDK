@@ -6,7 +6,7 @@ declare namespace RegistrySDK {
     interface addonInfos {
         name: string,
         description: string,
-        git: string,
+        latest: string,
         createdAt: Date,
         updatedAt: Date,
         author: {
@@ -21,6 +21,7 @@ declare namespace RegistrySDK {
         version: [
             {
                 version: string,
+                git: string,
                 createdAt: string
             }
         ]
@@ -60,7 +61,7 @@ declare namespace RegistrySDK {
             {
                 name: string,
                 description: string,
-                git: string,
+                latest: string,
                 createdAt: Date,
                 updatedAt: Date
             }
