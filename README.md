@@ -6,7 +6,6 @@
 ![size](https://img.shields.io/bundlephobia/min/@slimio/registry-sdk)
 [![Known Vulnerabilities](https://snyk.io/test/github/SlimIO/Registry-SDK/badge.svg?targetFile=package.json)](https://snyk.io/test/github/SlimIO/Registry-SDK?targetFile=package.json)
 [![Build Status](https://travis-ci.com/SlimIO/Registry-SDK.svg?branch=master)](https://travis-ci.com/SlimIO/Registry-SDK)
-[![Greenkeeper badge](https://badges.greenkeeper.io/SlimIO/Registry-SDK.svg)](https://greenkeeper.io/)
 
 Registry-SDK is a bunch of methods to query the [SlimIO Registry API](https://github.com/SlimIO/Registry).
 
