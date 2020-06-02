@@ -1,16 +1,17 @@
+require("make-promises-safe");
 require("dotenv").config();
 
 // Require Node.js dependencies
 const fs = require("fs");
-const { writeFile, readFile, access } = fs.promises;
+const { writeFile, readFile, rmdir } = fs.promises;
 const { join } = require("path");
 const { spawn } = require("child_process");
+const { sync: spawnSync } = require("cross-spawn");
 
 // Require Third-Party dependencies
 const japa = require("japa");
 const git = require("isomorphic-git");
-const del = require("del");
-const ora = require("ora");
+const Spinner = require("@slimio/async-cli-spinner");
 const is = require("@slimio/is");
 
 // Internal dependencies
@@ -22,24 +23,14 @@ let cp = null;
 
 // CONSTANTS
 const REG_DIR = join(__dirname, "registry");
-const EXEC_SUFFIX = process.platform === "win32";
 
 japa.group("Registry SDK", (group) => {
     let accessToken;
     group.before(async() => {
-        const spin1 = ora("Deleting ./registry").start();
-        try {
-            await access(REG_DIR);
-            await del([REG_DIR]);
-            spin1.succeed();
-        }
-        catch (err) {
-            // ignore
-            spin1.fail(err.message);
-        }
+        await rmdir(REG_DIR, { recursive: true });
 
         // Clone registry
-        const spinClone = ora("Cloning Registry from Github").start();
+        const spinClone = new Spinner({ text: "Cloning Registry from Github" }).start();
         await git.clone({
             dir: REG_DIR,
             url: "https://github.com/SlimIO/Registry.git"
@@ -47,39 +38,18 @@ japa.group("Registry SDK", (group) => {
         spinClone.succeed();
 
         // Install node_modules
-        const spinInstall = ora("Installing Registry dependencies").start();
-        await new Promise((resolve, reject) => {
-            const TTYStream = spawn(`npm${EXEC_SUFFIX ? ".cmd" : ""}`, ["install", "--production"], {
-                cwd: REG_DIR
-            });
-            TTYStream.once("close", () => {
-                spinInstall.succeed();
-                resolve();
-            });
-            TTYStream.once("error", (err) => {
-                spinInstall.fail(err.message);
-                reject(err);
-            });
-        });
+        console.log("Installing Registry dependencies");
+        spawnSync(`npm`, ["ci", "--only=production"], { cwd: REG_DIR, stdio: "inherit" });
 
         // Create .env file
         const buf = await readFile(join(__dirname, "envdata.txt"), "utf-8");
         await writeFile(join(REG_DIR, ".env"), buf.concat(`GIT_TOKEN=${process.env.GIT_TOKEN}`));
 
-        const hydrateSpin = ora("Hydrate SQLite database").start();
-        await new Promise((resolve, reject) => {
-            const TTYStream = spawn(process.argv[0], ["scripts/hydrate.js"], {
-                cwd: REG_DIR, stdio: "ignore"
-            });
-            TTYStream.once("close", () => {
-                hydrateSpin.succeed();
-                resolve();
-            });
-            TTYStream.once("error", (err) => {
-                hydrateSpin.fail(err.message);
-                reject(err);
-            });
+        const hydrateSpin = new Spinner({ text: "Hydrate SQLite database" }).start();
+        spawnSync(process.argv[0], ["scripts/hydrate.js"], {
+            cwd: REG_DIR, stdio: "ignore"
         });
+        hydrateSpin.succeed();
 
         // Npm start
         cp = spawn(process.argv[0], ["index.js"], {
@@ -94,7 +64,7 @@ japa.group("Registry SDK", (group) => {
     group.after(async() => {
         cp.kill();
         await new Promise((resolve) => setTimeout(resolve, 1000));
-        await del([REG_DIR]);
+        await rmdir(REG_DIR, { recursive: true });
     });
 
     japa("Check exported members", (assert) => {
