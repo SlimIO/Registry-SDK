@@ -40,7 +40,7 @@
         "dotenv": "^8.2.0",
         "eslint": "^7.0.0",
         "husky": "^4.2.5",
-        "isomorphic-git": "^0.78.3",
+        "isomorphic-git": "^1.8.4",
         "japa": "^3.0.1",
         "jsdoc": "^3.6.4",
         "make-promises-safe": "^5.1.0",
