@@ -39,7 +39,7 @@
         "cross-spawn": "^7.0.3",
         "dotenv": "^8.2.0",
         "eslint": "^7.0.0",
-        "husky": "^4.2.5",
+        "husky": "^7.0.0",
         "isomorphic-git": "^0.78.3",
         "japa": "^3.0.1",
         "jsdoc": "^3.6.4",
